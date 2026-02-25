@@ -136,7 +136,7 @@ struct EpilogueView: View {
             
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                         BubbleView(
                             bubble: ChatBubble(kind: .system, text: ending.postSceneLabel.l(lang)),
                             lang: lang
@@ -195,11 +195,12 @@ struct EpilogueView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 8)
                 }
-                .onChange(of: visibleTexts.count) { _ in
+                .defaultScrollAnchor(.bottom)
+                .onChange(of: visibleTexts.count) {
                     scrollToAnchor(proxy)
                 }
-                .onChange(of: showRestart) { show in
-                    if show {
+                .onChange(of: showRestart) { oldShow, newShow in
+                    if newShow {
                         scrollToAnchor(proxy)
                     }
                 }

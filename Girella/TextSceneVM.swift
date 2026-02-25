@@ -26,7 +26,8 @@ final class TextSceneVM {
     private let onTransition: () -> Void
     
     private var nodeIndex = 0
-    private nonisolated(unsafe) var runTask: Task<Void, Never>?
+    @ObservationIgnored
+    private var runTask: Task<Void, Never>?
     
     init(scene: TextScene,
          settings: SettingsManager,

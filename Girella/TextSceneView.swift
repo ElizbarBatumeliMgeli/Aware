@@ -42,7 +42,7 @@ struct TextSceneView: View {
             // ─── Chat feed (fills all space above choices) ───
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                         ForEach(viewModel.bubbles) { b in
                             BubbleView(bubble: b, lang: lang)
                                 .id(b.id)
@@ -68,14 +68,15 @@ struct TextSceneView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 8)
                 }
-                .onChange(of: viewModel.bubbles.count) { _ in
+                .defaultScrollAnchor(.bottom)
+                .onChange(of: viewModel.bubbles.count) {
                     scrollToAnchor(proxy)
                 }
-                .onChange(of: viewModel.isTyping) { typing in
-                    if typing { scrollToAnchor(proxy) }
+                .onChange(of: viewModel.isTyping) { oldTyping, newTyping in
+                    if newTyping { scrollToAnchor(proxy) }
                 }
-                .onChange(of: viewModel.choicesVisible) { visible in
-                    if visible {
+                .onChange(of: viewModel.choicesVisible) { oldVisible, newVisible in
+                    if newVisible {
                         // When choices appear, scroll so messages are above them
                         scrollToAnchor(proxy)
                     }

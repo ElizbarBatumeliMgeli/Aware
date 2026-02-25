@@ -1,5 +1,5 @@
 //
-//  EnocunterView.swift
+//  EncounterView.swift
 //  Girella
 //
 //  Created by Elizbar Kheladze on 23/02/26.
@@ -40,7 +40,7 @@ struct EncounterView: View {
             // ─── Narrative feed ───
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 12) {
                         ForEach(viewModel.bubbles) { b in
                             BubbleView(bubble: b, lang: lang)
                                 .id(b.id)
@@ -63,14 +63,15 @@ struct EncounterView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 8)
                 }
-                .onChange(of: viewModel.bubbles.count) { _ in
+                .defaultScrollAnchor(.bottom)
+                .onChange(of: viewModel.bubbles.count) {
                     scrollToAnchor(proxy)
                 }
-                .onChange(of: viewModel.isThinking) { thinking in
-                    if thinking { scrollToAnchor(proxy) }
+                .onChange(of: viewModel.isThinking) { oldThinking, newThinking in
+                    if newThinking { scrollToAnchor(proxy) }
                 }
-                .onChange(of: viewModel.choicesVisible) { visible in
-                    if visible { scrollToAnchor(proxy) }
+                .onChange(of: viewModel.choicesVisible) { oldVisible, newVisible in
+                    if newVisible { scrollToAnchor(proxy) }
                 }
             }
             

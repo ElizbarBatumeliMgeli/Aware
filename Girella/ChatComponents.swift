@@ -95,7 +95,9 @@ struct BubbleView: View {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .stroke(G.npcBorder, lineWidth: 0.5)
                 )
-                .frame(maxWidth: UIScreen.main.bounds.width * 0.78, alignment: .leading)
+                .containerRelativeFrame(.horizontal, alignment: .leading) { length, axis in
+                    length * 0.78
+                }
             
             Spacer(minLength: 30)
         }
@@ -190,7 +192,9 @@ struct BubbleView: View {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .stroke(color.opacity(0.15), lineWidth: 0.5)
                 )
-                .frame(maxWidth: UIScreen.main.bounds.width * 0.78, alignment: .leading)
+                .containerRelativeFrame(.horizontal, alignment: .leading) { length, axis in
+                    length * 0.78
+                }
             Spacer(minLength: 30)
         }
     }
