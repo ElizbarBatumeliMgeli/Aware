@@ -88,6 +88,23 @@ enum Pacing: String, CaseIterable, Identifiable, Codable {
 @Observable
 @MainActor
 final class SettingsManager {
-    @ObservationIgnored @AppStorage("aware_lang") var language: AppLanguage = .english
-    @ObservationIgnored @AppStorage("aware_pace") var pacing: Pacing = .medium
+    var language: AppLanguage {
+        didSet {
+            UserDefaults.standard.set(language.rawValue, forKey: "aware_lang")
+        }
+    }
+    
+    var pacing: Pacing {
+        didSet {
+            UserDefaults.standard.set(pacing.rawValue, forKey: "aware_pace")
+        }
+    }
+    
+    init() {
+        let savedLang = UserDefaults.standard.string(forKey: "aware_lang")
+        self.language = savedLang.flatMap(AppLanguage.init) ?? .english
+        
+        let savedPace = UserDefaults.standard.string(forKey: "aware_pace")
+        self.pacing = savedPace.flatMap(Pacing.init) ?? .medium
+    }
 }
