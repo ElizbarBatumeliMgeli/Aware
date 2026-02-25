@@ -1,0 +1,672 @@
+{
+  "chapter": 1,
+  "scene_id": "text_thread_01",
+  "scene_type": "text_message_thread",
+  "characters": ["Player", "Andreas"],
+  "nodes": [
+    {
+      "id": "node_01",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "saw a dog that looks exactly like u today",
+          "it": "oggi ho visto un cane che ti somiglia esattamente",
+          "ka": "დღეს ძაღლი ვნახე ზუსტად შენს მსგავსი",
+          "fa": "امروز یه سگ دیدم دقیقا شبیه تو بود"
+        },
+        {
+          "en": "like the exact same energy",
+          "it": "tipo la stessa identica energia",
+          "ka": "ზუსტად იგივე ენერგია",
+          "fa": "دقیقا همون انرژی"
+        },
+        {
+          "en": "neurotic but good hair",
+          "it": "nevrotico ma con bei capelli",
+          "ka": "ნევროტიკული მაგრამ კარგი თმით",
+          "fa": "عصبی ولی موهاش خوب بود"
+        }
+      ],
+      "response_delay_ms": 4000
+    },
+    {
+      "id": "node_02",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "wow",
+          "it": "wow",
+          "ka": "ვაუ",
+          "fa": "وای"
+        },
+        {
+          "en": "dragged",
+          "it": "demolito",
+          "ka": "გამანადგურე",
+          "fa": "نابودم کردی"
+        },
+        {
+          "en": "what breed",
+          "it": "che razza",
+          "ka": "რა ჯიშის",
+          "fa": "چه نژادی"
+        }
+      ]
+    },
+    {
+      "id": "node_03",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "greyhound. shaky legs.",
+          "it": "levriero. gambe tremolanti.",
+          "ka": "გრეიჰაუნდი. ფეხები უკანკალებს.",
+          "fa": "گریهاند. پاهاش میلرزید."
+        }
+      ],
+      "response_delay_ms": 500
+    },
+    {
+      "id": "node_04",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "lol",
+          "it": "lol",
+          "ka": "ლოლ",
+          "fa": "لول"
+        },
+        {
+          "en": "fair actually",
+          "it": "in effetti ci sta",
+          "ka": "სამართლიანია სინამდვილეში",
+          "fa": "حقیقتا حقته"
+        }
+      ]
+    },
+    {
+      "id": "node_05",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "are we still on for tonight?",
+          "it": "siamo ancora d'accordo per stasera?",
+          "ka": "დღეს საღამოს ისევ ვგეგმავთ?",
+          "fa": "هنوز برنامه امشب پابرجاست؟"
+        },
+        {
+          "en": "haven't seen you in like two weeks",
+          "it": "non ti vedo tipo da due settimane",
+          "ka": "ორი კვირაა არ გინახავარ",
+          "fa": "دو هفته‌ست ندیدمت"
+        }
+      ],
+      "response_delay_ms": 8000
+    },
+    {
+      "id": "node_06",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "yeah",
+          "it": "sì",
+          "ka": "კი",
+          "fa": "آره"
+        },
+        {
+          "en": "was just looking at the bus schedule",
+          "it": "stavo giusto guardando gli orari del bus",
+          "ka": "ახლა ავტობუსის განრიგს ვუყურებდი",
+          "fa": "داشتم برنامه اتوبوسو نگاه میکردم"
+        }
+      ]
+    },
+    {
+      "id": "node_07",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "cool. thinking we grab food?",
+          "it": "bene. pensavo di mangiare qualcosa?",
+          "ka": "კარგი. ვიფიქრე რამე ვჭამოთ?",
+          "fa": "خوبه. فکر کردم یچیزی بخوریم؟"
+        }
+      ],
+      "response_delay_ms": 12000
+    },
+    {
+      "id": "node_08",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "idk if i'm super hungry yet",
+          "it": "boh non so se ho così fame ancora",
+          "ka": "არ ვიცი ძაა მშიერი ხომ არ ვარ ჯერ",
+          "fa": "نمیدونم هنوز خیلی گشنم نیست"
+        },
+        {
+          "en": "had a massive lunch",
+          "it": "ho mangiato un pranzo enorme",
+          "ka": "უზარმაზარი სადილი მქონდა",
+          "fa": "ناهار خیلی زیاد خوردم"
+        }
+      ]
+    },
+    {
+      "id": "choice_01",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "no worries, we can just grab drinks or walk around",
+            "it": "tranquillo, possiamo prendere qualcosa da bere o fare un giro",
+            "ka": "არაუშავს, შეგვიძლია სასმელი ავიღოთ ან გავისეირნოთ",
+            "fa": "مشکلی نیست، میتونیم یه نوشیدنی بزنیم یا قدم بزنیم"
+          },
+          "points": 1,
+          "response_delay_ms": 4000,
+          "branch_messages": [
+            {
+              "en": "okay cool",
+              "it": "ok va bene",
+              "ka": "კარგი ოკ",
+              "fa": "باشه اوکی"
+            },
+            {
+              "en": "yeah walking sounds better",
+              "it": "sì camminare suona meglio",
+              "ka": "კი სეირნობა უკეთესია",
+              "fa": "آره قدم زدن بهتره"
+            },
+            {
+              "en": "feel kind of restless anyway",
+              "it": "mi sento un po' agitato comunque",
+              "ka": "მაინც ვერ ვზივარ ერთ ადგილას",
+              "fa": "یجورایی بیقرارم ولی"
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "you gotta eat something though, it's gonna be dinnertime",
+            "it": "però qualcosa devi mangiare, sarà ora di cena",
+            "ka": "მაგრამ რაღაც უნდა ჭამო, ვახშმის დროა",
+            "fa": "ولی باید یچیزی بخوری، وقت شامه"
+          },
+          "points": 0,
+          "response_delay_ms": 8000,
+          "branch_messages": [
+            {
+              "en": "i mean i will eventually",
+              "it": "cioè prima o poi sì",
+              "ka": "ვგულისხმობ საბოლოოდ ვჭამ",
+              "fa": "یعنی آخرش میخورم"
+            },
+            {
+              "en": "just said i'm not hungry rn",
+              "it": "ho appena detto che non ho fame adesso",
+              "ka": "ახლახან ვთქვი არ მშია ახლა",
+              "fa": "همین الان گفتم الان گشنم نیست"
+            },
+            {
+              "en": "chill",
+              "it": "rilassati",
+              "ka": "მშვიდად",
+              "fa": "ریلکس"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_09",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "where were u thinking?",
+          "it": "a cosa pensavi?",
+          "ka": "სად ფიქრობდი?",
+          "fa": "کجارو فکر میکردی؟"
+        }
+      ]
+    },
+    {
+      "id": "choice_02",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "there's that noodle place on 4th? or the park has food trucks?",
+            "it": "c'è quel posto di noodle sulla 4a? o il parco ha i food truck?",
+            "ka": "ის ნუდლების ადგილი მე-4 ქუჩაზე? ან პარკში ფუდტრაკებია?",
+            "fa": "اون نودل فروشی تو خیابون چهارم؟ یا پارک فود تراک داره؟"
+          },
+          "points": 1,
+          "response_delay_ms": 6000,
+          "branch_messages": [
+            {
+              "en": "let's do the park",
+              "it": "facciamo il parco",
+              "ka": "პარკში წავიდეთ",
+              "fa": "بریم پارک"
+            },
+            {
+              "en": "easier to bail if it rains",
+              "it": "più facile scappare se piove",
+              "ka": "უფრო ადვილია წავიდე თუ წვიმს",
+              "fa": "اگه بارون بیاد راحتتره بزنیم بیرون"
+            },
+            {
+              "en": "(and less crowded)",
+              "it": "(e meno affollato)",
+              "ka": "(და ნაკლები ხალხი)",
+              "fa": "(و کمتر شلوغه)"
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "let's go to the burger spot. you love their fries. treat yourself.",
+            "it": "andiamo al posto degli hamburger. adori le loro patatine. concediti qualcosa.",
+            "ka": "ბურგერის ადგილას წავიდეთ. ფრიები გიყვარს. გაიხალისე თავი.",
+            "fa": "بریم همبرگریه. عاشق سیب زمینیاشونی. به خودت برس."
+          },
+          "points": 0,
+          "response_delay_ms": 10000,
+          "branch_messages": [
+            {
+              "en": "eh",
+              "it": "meh",
+              "ka": "ეჰ",
+              "fa": "اه"
+            },
+            {
+              "en": "little heavy for me rn",
+              "it": "un po' pesante per me adesso",
+              "ka": "ცოტა მძიმეა ჩემთვის ახლა",
+              "fa": "الان یکم سنگینه برام"
+            },
+            {
+              "en": "grease makes me feel gross lately",
+              "it": "il grasso mi fa sentire schifo ultimamente",
+              "ka": "ცხიმიანი საჭმელი ბოლო დროს ცუდად მახდენს",
+              "fa": "چربی بدم میاد ازش این اواخر"
+            },
+            {
+              "en": "lets just do the park",
+              "it": "facciamo il parco dai",
+              "ka": "უბრალოდ პარკში წავიდეთ",
+              "fa": "بریم همون پارک"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_10",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "park works. 7?",
+          "it": "il parco va bene. alle 7?",
+          "ka": "პარკი კარგია. 7-ზე?",
+          "fa": "پارک اوکیه. ساعت ۷؟"
+        }
+      ],
+      "response_delay_ms": 4000
+    },
+    {
+      "id": "node_11",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "7:30?",
+          "it": "7:30?",
+          "ka": "7:30?",
+          "fa": "۷:۳۰؟"
+        },
+        {
+          "en": "have to finish some work",
+          "it": "devo finire del lavoro",
+          "ka": "საქმე უნდა დავამთავრო",
+          "fa": "باید یکم کار تموم کنم"
+        }
+      ]
+    },
+    {
+      "id": "node_12",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "sure. 7:30.",
+          "it": "certo. 7:30.",
+          "ka": "კარგი. 7:30.",
+          "fa": "باشه. ۷:۳۰."
+        }
+      ],
+      "system_event": "time_jump"
+    },
+    {
+      "id": "time_jump_01",
+      "type": "system_event",
+      "event": "time_jump",
+      "label": {
+        "en": "— later that evening —",
+        "it": "— più tardi quella sera —",
+        "ka": "— მოგვიანებით იმ საღამოს —",
+        "fa": "— بعدتر همون شب —"
+      }
+    },
+    {
+      "id": "node_13",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "leaving my place now",
+          "it": "sto uscendo di casa adesso",
+          "ka": "ახლა სახლიდან გამოვდივარ",
+          "fa": "الان دارم از خونه میزنم بیرون"
+        },
+        {
+          "en": "starving tbh",
+          "it": "muoio di fame tbh",
+          "ka": "სიმართლე რომ ვთქვა შიმშილით ვკვდები",
+          "fa": "راستش خیلی گشنمه"
+        }
+      ],
+      "response_delay_ms": 14000
+    },
+    {
+      "id": "node_14",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "running a bit late",
+          "it": "sono un po' in ritardo",
+          "ka": "ცოტა ვაგვიანებ",
+          "fa": "یکم دیرم شده"
+        },
+        {
+          "en": "sorry",
+          "it": "scusa",
+          "ka": "ბოდიში",
+          "fa": "ببخشید"
+        }
+      ]
+    },
+    {
+      "id": "choice_03",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "all good. take your time.",
+            "it": "tranquillo. fai con calma.",
+            "ka": "კარგი. დრო არ გეჩქარება.",
+            "fa": "اشکالی نداره. عجله نکن."
+          },
+          "points": 1,
+          "response_delay_ms": 4000,
+          "branch_messages": [
+            {
+              "en": "thx",
+              "it": "grz",
+              "ka": "მადლობა",
+              "fa": "ممنون"
+            },
+            {
+              "en": "just couldn't find a shirt i liked",
+              "it": "non trovavo una maglietta che mi piacesse",
+              "ka": "ვერ ვიპოვე მაისური რომელიც მომეწონა",
+              "fa": "یه لباس که ازش خوشم بیاد پیدا نمیکردم"
+            },
+            {
+              "en": "everything looks weird on me today",
+              "it": "tutto mi sta strano addosso oggi",
+              "ka": "ყველაფერი უცნაურად მიჯდება დღეს",
+              "fa": "همه چی امروز رو من عجیب بنظر میاد"
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "you're always late lol. hurry up!",
+            "it": "sei sempre in ritardo lol. sbrigati!",
+            "ka": "ყოველთვის აგვიანებ ლოლ. იჩქარე!",
+            "fa": "همیشه دیر میکنی لول. زود باش!"
+          },
+          "points": 0,
+          "response_delay_ms": 6000,
+          "branch_messages": [
+            {
+              "en": "yeah sorry",
+              "it": "sì scusa",
+              "ka": "ჰო ბოდიში",
+              "fa": "آره ببخشید"
+            },
+            {
+              "en": "had a wardrobe malfunction",
+              "it": "ho avuto un problema con il guardaroba",
+              "ka": "ტანსაცმელთან პრობლემა მქონდა",
+              "fa": "یه مشکل لباسی پیش اومد"
+            },
+            {
+              "en": "i'm leaving in 5",
+              "it": "esco tra 5 minuti",
+              "ka": "5 წუთში გამოვდივარ",
+              "fa": "۵ دقیقه دیگه میزنم بیرون"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_15",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "actually",
+          "it": "a proposito",
+          "ka": "სხვათა შორის",
+          "fa": "راستی"
+        },
+        {
+          "en": "do you mind if we skip the food trucks?",
+          "it": "ti dispiace se saltiamo i food truck?",
+          "ka": "გენაღვლება თუ ფუდტრაკებს გამოვტოვებთ?",
+          "fa": "اشکالی نداره فود تراکارو بیخیال شیم؟"
+        },
+        {
+          "en": "kinda loud there",
+          "it": "è un po' rumoroso lì",
+          "ka": "ცოტა ხმაურიანია იქ",
+          "fa": "یکم شلوغه اونجا"
+        }
+      ]
+    },
+    {
+      "id": "choice_04",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "we can go wherever is comfortable. quiet works.",
+            "it": "possiamo andare dove ti senti a tuo agio. tranquillo va bene.",
+            "ka": "შეგვიძლია წავიდეთ სადაც კომფორტულია. მშვიდი კარგია.",
+            "fa": "هرجا راحتی میریم. آروم خوبه."
+          },
+          "points": 1,
+          "response_delay_ms": 6000,
+          "branch_messages": [
+            {
+              "en": "appreciate it",
+              "it": "grazie davvero",
+              "ka": "მადლობა ამისთვის",
+              "fa": "ممنونم"
+            },
+            {
+              "en": "there's that quiet benches area near the river",
+              "it": "c'è quella zona con le panchine tranquille vicino al fiume",
+              "ka": "მდინარესთან არის ის წყნარი სკამები",
+              "fa": "اون قسمت ساکت با نیمکتا کنار رودخونه هست"
+            },
+            {
+              "en": "we can grab something small on the way?",
+              "it": "possiamo prendere qualcosa di leggero per strada?",
+              "ka": "შეგვიძლია რამე პატარა ავიღოთ გზად?",
+              "fa": "میتونیم تو راه یچیز کوچیک بگیریم؟"
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "it's not that loud. plus i'm really hungry, let's just go.",
+            "it": "non è così rumoroso. in più ho davvero fame, andiamo e basta.",
+            "ka": "არც ისე ხმაურიანია. გარდა ამისა ძაან მშია, წავიდეთ უბრალოდ.",
+            "fa": "اینقدرام شلوغ نیست. تازه خیلی گشنمه، بریم دیگه."
+          },
+          "points": 0,
+          "response_delay_ms": 10000,
+          "branch_messages": [
+            {
+              "en": "ok",
+              "it": "ok",
+              "ka": "ოკ",
+              "fa": "باشه"
+            },
+            {
+              "en": "fine",
+              "it": "va bene",
+              "ka": "კარგი",
+              "fa": "خوبه"
+            },
+            {
+              "en": "see you there",
+              "it": "ci vediamo lì",
+              "ka": "იქ შევხვდები",
+              "fa": "اونجا میبینمت"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_16",
+      "type": "message_block",
+      "sender": "Andreas",
+      "messages": [
+        {
+          "en": "send me a pic of what ur wearing?",
+          "it": "mandami una foto di come sei vestito?",
+          "ka": "გამომიგზავნე ფოტო რა გაცვია?",
+          "fa": "یه عکس بفرست چی پوشیدی؟"
+        },
+        {
+          "en": "don't wanna be overdressed",
+          "it": "non voglio essere troppo vestito",
+          "ka": "არ მინდა ზედმეტად ჩაცმული ვიყო",
+          "fa": "نمیخوام زیادی خوش لباس باشم"
+        }
+      ]
+    },
+    {
+      "id": "choice_05",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "just jeans and that old hoodie. come as you are.",
+            "it": "solo jeans e quella vecchia felpa. vieni come sei.",
+            "ka": "უბრალოდ ჯინსი და ძველი ჰუდი. მოდი როგორიც ხარ.",
+            "fa": "فقط شلوار جین و اون هودی قدیمی. همونجوری که هستی بیا."
+          },
+          "points": 1,
+          "response_delay_ms": 4000,
+          "branch_messages": [
+            {
+              "en": "ok thank god",
+              "it": "ok grazie al cielo",
+              "ka": "ოკ ღმერთს მადლობა",
+              "fa": "اوکی خداروشکر"
+            },
+            {
+              "en": "going hobo chic then",
+              "it": "allora vado sullo stile barbone chic",
+              "ka": "მაშინ მაწანწალა-ელეგანტურ სტილში მივდივარ",
+              "fa": "پس ژولیده شیک میام"
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "looking hot obviously. you should dress up too, boost the confidence!",
+            "it": "ovviamente sto benissimo. dovresti vestirti bene anche tu, aumenta l'autostima!",
+            "ka": "ცხადია მაგრად გამოვიყურები. შენც კარგად ჩაიცვი, თავდაჯერებულობას ამაღლებს!",
+            "fa": "خوشتیپم واضحه. تو هم خوب بپوش، اعتماد به نفست میره بالا!"
+          },
+          "points": 0,
+          "response_delay_ms": 6000,
+          "branch_messages": [
+            {
+              "en": "lol",
+              "it": "lol",
+              "ka": "ლოლ",
+              "fa": "لول"
+            },
+            {
+              "en": "confidence isn't really the issue",
+              "it": "l'autostima non è proprio il problema",
+              "ka": "თავდაჯერებულობა არ არის პრობლემა სინამდვილეში",
+              "fa": "اعتماد به نفس واقعا مشکل نیست"
+            },
+            {
+              "en": "ill just wear whatever",
+              "it": "mi metto qualsiasi cosa",
+              "ka": "უბრალოდ რამეს ჩავიცვამ",
+              "fa": "هرچی شد میپوشم"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_17",
+      "type": "message_block",
+      "sender": "Player",
+      "messages": [
+        {
+          "en": "see u in 10.",
+          "it": "ci vediamo tra 10.",
+          "ka": "10 წუთში შევხვდებით.",
+          "fa": "تا ۱۰ دقیقه دیگه میبینمت."
+        }
+      ],
+      "system_event": "transition_to_encounter"
+    }
+  ]
+}

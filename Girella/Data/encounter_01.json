@@ -1,0 +1,926 @@
+{
+  "chapter": 1,
+  "scene_id": "encounter_01",
+  "scene_type": "in_person_interaction",
+  "location": {
+    "en": "Riverside Walkway",
+    "it": "Passeggiata lungo il fiume",
+    "ka": "მდინარისპირა ბილიკი",
+    "fa": "پیاده‌رو کنار رودخانه"
+  },
+  "atmosphere": {
+    "en": "Windy, grey sky, distant traffic noise",
+    "it": "Ventoso, cielo grigio, rumore di traffico in lontananza",
+    "ka": "ქარიანი, ნაცრისფერი ცა, მოშორებით მანქანების ხმაური",
+    "fa": "بادی، آسمون خاکستری، صدای ترافیک از دور"
+  },
+  "nodes": [
+    {
+      "id": "scene_start",
+      "type": "narrative_block",
+      "description": {
+        "en": "Andreas is leaning against the railing. He is wearing a coat that is slightly too big. He is holding an unlit cigarette. He looks at the water, avoiding eye contact as you approach.",
+        "it": "Andreas è appoggiato alla ringhiera. Indossa un cappotto leggermente troppo grande. Ha in mano una sigaretta spenta. Guarda l'acqua, evitando il contatto visivo mentre ti avvicini.",
+        "ka": "ანდრეას მოაჯირს ეყრდნობა. ცოტა მოზრდილი ქურთუკი აცვია. ხელში აუნთებელი სიგარეტი უჭირავს. წყალს უყურებს, თვალებში ყურებას გაურბის როცა უახლოვდები.",
+        "fa": "آندریاس به نرده تکیه داده. یه کت پوشیده که یکم بزرگتره. یه سیگار روشن نشده دستشه. به آب نگاه میکنه، وقتی نزدیک میشی از تماس چشمی فرار میکنه."
+      }
+    },
+    {
+      "id": "node_18",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "Hey.",
+          "it": "Ehi.",
+          "ka": "ჰეი.",
+          "fa": "هی."
+        },
+        {
+          "en": "You made it.",
+          "it": "Ce l'hai fatta.",
+          "ka": "მოხვედი.",
+          "fa": "رسیدی."
+        }
+      ],
+      "reaction_delay_ms": 2000
+    },
+    {
+      "id": "node_19",
+      "type": "dialogue_block",
+      "speaker": "Player",
+      "lines": [
+        {
+          "en": "Yeah. You okay? You look cold.",
+          "it": "Sì. Tutto bene? Sembri congelato.",
+          "ka": "კი. კარგად ხარ? ცივა შენთვის.",
+          "fa": "آره. خوبی؟ سردت شده انگار."
+        }
+      ]
+    },
+    {
+      "id": "node_20",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "I'm fine.",
+          "it": "Sto bene.",
+          "ka": "კარგად ვარ.",
+          "fa": "خوبم."
+        },
+        {
+          "en": "Just... refreshing. Needed air.",
+          "it": "Solo... rinfrescante. Avevo bisogno d'aria.",
+          "ka": "უბრალოდ... გამაგრილებელია. ჰაერი მჭირდებოდა.",
+          "fa": "فقط... هوا خوبه. هوای تازه لازم داشتم."
+        }
+      ],
+      "narrative_action": {
+        "en": "He puts the unlit cigarette back in his pocket. He looks at his shoes.",
+        "it": "Rimette la sigaretta spenta in tasca. Si guarda le scarpe.",
+        "ka": "აუნთებელ სიგარეტს ჯიბეში იდებს. ფეხსაცმელებს უყურებს.",
+        "fa": "سیگار روشن نشده رو میذاره تو جیبش. به کفشاش نگاه میکنه."
+      },
+      "reaction_delay_ms": 4000
+    },
+    {
+      "id": "choice_06",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Good to see you, man. (Go for a hug)",
+            "it": "Bello vederti, amico. (Vai per un abbraccio)",
+            "ka": "მიხარია რომ გხედავ. (მოხვევა)",
+            "fa": "خوشحالم که میبینمت. (بغل کردن)"
+          },
+          "points": 1,
+          "reaction_delay_ms": 3000,
+          "branch_narrative": {
+            "en": "Andreas stiffens, then pats your back awkwardly.",
+            "it": "Andreas si irrigidisce, poi ti dà una pacca sulla schiena goffamente.",
+            "ka": "ანდრეას იჭიმება, შემდეგ უხერხულად ზურგზე ხელს გხვევს.",
+            "fa": "آندریاس خشک میشه، بعد با دستپاچگی به پشتت میزنه."
+          },
+          "branch_lines": [
+            {
+              "en": "Yeah. You too.",
+              "it": "Sì. Anche tu.",
+              "ka": "კი. შენც.",
+              "fa": "آره. منم همینطور."
+            },
+            {
+              "en": "It's been a minute.",
+              "it": "È passato un po'.",
+              "ka": "დიდი ხანია.",
+              "fa": "یه مدتی شده."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "You look skinny! Have you lost weight?",
+            "it": "Sei magro! Hai perso peso?",
+            "ka": "გამხდარი ხარ! წონაში დაიკელი?",
+            "fa": "لاغر شدی! وزن کم کردی؟"
+          },
+          "points": 0,
+          "reaction_delay_ms": 6000,
+          "branch_narrative": {
+            "en": "Andreas wraps his coat tighter around himself, stepping back.",
+            "it": "Andreas si stringe il cappotto addosso, facendo un passo indietro.",
+            "ka": "ანდრეას ქურთუკს უფრო მჭიდროდ იხვევს, უკან იწევს.",
+            "fa": "آندریاس کتشو محکم‌تر دور خودش میپیچه و یه قدم عقب میره."
+          },
+          "branch_lines": [
+            {
+              "en": "Does everyone have to comment on that?",
+              "it": "Tutti devono commentare su questo?",
+              "ka": "ყველას უნდა ამის კომენტირება?",
+              "fa": "همه باید نظر بدن؟"
+            },
+            {
+              "en": "I'm just tired.",
+              "it": "Sono solo stanco.",
+              "ka": "უბრალოდ დაღლილი ვარ.",
+              "fa": "فقط خسته‌ام."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_21",
+      "type": "narrative_block",
+      "description": {
+        "en": "You start walking. There is a food cart ahead selling pretzels and sodas.",
+        "it": "Iniziate a camminare. C'è un carretto di cibo più avanti che vende pretzel e bibite.",
+        "ka": "სეირნობას იწყებთ. წინ საკვების ურიკაა რომელიც პრეცელებსა და გაზიან სასმელებს ყიდის.",
+        "fa": "شروع به قدم زدن میکنید. جلوتر یه چرخ‌دستی غذا هست که بِرتزِل و نوشابه میفروشه."
+      }
+    },
+    {
+      "id": "node_22",
+      "type": "dialogue_block",
+      "speaker": "Player",
+      "lines": [
+        {
+          "en": "I'm gonna grab a pretzel. You want one?",
+          "it": "Prendo un pretzel. Ne vuoi uno?",
+          "ka": "პრეცელს ავიღებ. გინდა ერთი?",
+          "fa": "میخوام یه برتزل بگیرم. تو هم میخوای؟"
+        }
+      ]
+    },
+    {
+      "id": "node_23",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "Nah.",
+          "it": "No.",
+          "ka": "არა.",
+          "fa": "نه."
+        },
+        {
+          "en": "I ate that huge lunch remember?",
+          "it": "Ho mangiato quel pranzo enorme ricordi?",
+          "ka": "ის უზარმაზარი სადილი შევჭამე, ხომ გახსოვს?",
+          "fa": "اون ناهار خیلی زیادو خوردم یادته؟"
+        }
+      ],
+      "reaction_delay_ms": 500
+    },
+    {
+      "id": "choice_07",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Right, forgot. I'll just be a sec.",
+            "it": "Giusto, avevo dimenticato. Faccio in un attimo.",
+            "ka": "აჰა, დამავიწყდა. ერთი წამით.",
+            "fa": "آها، یادم رفته بود. یه لحظه."
+          },
+          "points": 1,
+          "reaction_delay_ms": 1000,
+          "branch_narrative": {
+            "en": "Andreas checks his phone incessantly while you buy food.",
+            "it": "Andreas controlla il telefono compulsivamente mentre compri il cibo.",
+            "ka": "ანდრეას გაუჩერებლად ტელეფონს ამოწმებს სანამ საჭმელს ყიდულობ.",
+            "fa": "آندریاس بی‌وقفه گوشیشو چک میکنه تا تو غذا میخری."
+          },
+          "branch_lines": [
+            {
+              "en": "Cool. I'll wait here.",
+              "it": "Ok. Ti aspetto qui.",
+              "ka": "კარგი. აქ დაგელოდები.",
+              "fa": "باشه. اینجا منتظرت میمونم."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "Come on, split one with me? Just a bite.",
+            "it": "Dai, dividiamone uno? Solo un morso.",
+            "ka": "დაი, გაიყო ჩემთან ერთი? ერთი ნაჭერი მხოლოდ.",
+            "fa": "بیا یکیو نصف کنیم؟ فقط یه گاز."
+          },
+          "points": 0,
+          "reaction_delay_ms": 4000,
+          "branch_narrative": {
+            "en": "His tone snaps sharp. He looks away.",
+            "it": "Il suo tono diventa secco. Guarda altrove.",
+            "ka": "ტონი მკვეთრად იცვლება. სხვაგან იყურება.",
+            "fa": "لحنش تند میشه. نگاهشو برمیگردونه."
+          },
+          "branch_lines": [
+            {
+              "en": "I said no.",
+              "it": "Ho detto no.",
+              "ka": "ვთქვი არა.",
+              "fa": "گفتم نه."
+            },
+            {
+              "en": "Sorry. Just... not hungry.",
+              "it": "Scusa. Solo... non ho fame.",
+              "ka": "ბოდიში. უბრალოდ... არ მშია.",
+              "fa": "ببخشید. فقط... گشنم نیست."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_24",
+      "type": "narrative_block",
+      "description": {
+        "en": "You return with food. You both sit on a bench overlooking the river. Andreas watches the water.",
+        "it": "Torni con il cibo. Vi sedete entrambi su una panchina con vista sul fiume. Andreas guarda l'acqua.",
+        "ka": "საჭმელით ბრუნდები. ორივე ჯდებით სკამზე მდინარის ხედით. ანდრეას წყალს უყურებს.",
+        "fa": "با غذا برمیگردی. هر دو رو یه نیمکت مشرف به رودخونه میشینید. آندریاس به آب نگاه میکنه."
+      }
+    },
+    {
+      "id": "node_25",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "So.",
+          "it": "Allora.",
+          "ka": "სო.",
+          "fa": "خب."
+        },
+        {
+          "en": "How's the job? Still hating the manager?",
+          "it": "Come va il lavoro? Odi ancora il capo?",
+          "ka": "სამსახური როგორ? ისევ გძულს მენეჯერი?",
+          "fa": "کار چطوره؟ هنوز از مدیرت بدت میاد؟"
+        }
+      ],
+      "reaction_delay_ms": 5000
+    },
+    {
+      "id": "choice_08",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Oh, he's a nightmare. Micromanages everything.",
+            "it": "Oh, è un incubo. Controlla tutto nei minimi dettagli.",
+            "ka": "ოჰ, კოშმარია. ყველაფერს აკონტროლებს.",
+            "fa": "اوه، کابوسه. همه چیو ریزبینانه کنترل میکنه."
+          },
+          "points": 1,
+          "reaction_delay_ms": 2000,
+          "branch_lines": [
+            {
+              "en": "Control freaks are the worst.",
+              "it": "I maniaci del controllo sono i peggiori.",
+              "ka": "კონტროლის მოყვარულები ყველაზე ცუდები არიან.",
+              "fa": "وسواسیای کنترل بدترینن."
+            },
+            {
+              "en": "Like, just let people exist.",
+              "it": "Tipo, lascia vivere la gente.",
+              "ka": "ტიპის, მიეცი ხალხს ცხოვრების საშუალება.",
+              "fa": "یعنی بذار مردم زندگی کنن."
+            },
+            {
+              "en": "I feel like... everything feels like micromanagement lately.",
+              "it": "Mi sento come se... tutto sembrasse microgestione ultimamente.",
+              "ka": "ვგრძნობ რომ... ყველაფერი მიკრომენეჯმენტი ჩანს ბოლო დროს.",
+              "fa": "حس میکنم... همه چی این اواخر شبیه کنترل شده."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "Work is whatever. I'm more worried about you, you've been ghosting us.",
+            "it": "Il lavoro è qualsiasi cosa. Sono più preoccupato per te, ci hai ghostato.",
+            "ka": "სამსახური რაც არის ისა. შენზე მეტად ვნერვიულობ, გაუჩინარდი.",
+            "fa": "کار هرچی. بیشتر نگران توام، همه‌مونو گوست کردی."
+          },
+          "points": 0,
+          "reaction_delay_ms": 5000,
+          "branch_lines": [
+            {
+              "en": "I'm not ghosting. I'm busy.",
+              "it": "Non sto ghostando. Sono impegnato.",
+              "ka": "არ გაუჩინარდები. დაკავებული ვარ.",
+              "fa": "گوست نکردم. سرم شلوغه."
+            },
+            {
+              "en": "Can we not make this an intervention? I just wanted to hang out.",
+              "it": "Possiamo non farne un intervento? Volevo solo uscire.",
+              "ka": "შეგვიძლია ეს ინტერვენცია არ გავხადოთ? უბრალოდ მინდოდა გავრთობილიყავით.",
+              "fa": "میشه اینو تبدیل نکنیم به مداخله؟ فقط میخواستم بریم بیرون."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_26",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "narrative_action": {
+        "en": "He picks at a loose thread on his jeans.",
+        "it": "Gioca con un filo scucito dei suoi jeans.",
+        "ka": "ჯინსზე გაშლილ ძაფს აწვალებს.",
+        "fa": "یه نخ ول رو شلوار جینش رو میکنه."
+      },
+      "lines": [
+        {
+          "en": "Do you ever feel like... if you stop paying attention for one second, everything will just fall apart?",
+          "it": "Ti capita mai di sentire che... se smetti di fare attenzione per un secondo, tutto andrà a pezzi?",
+          "ka": "ოდესმე გრძნობ რომ... თუ ერთი წამით ყურადღებას მოადუნებ, ყველაფერი დაინგრევა?",
+          "fa": "تا حالا حس کردی که... اگه یه ثانیه حواست نباشه، همه چی از هم میپاشه؟"
+        }
+      ],
+      "reaction_delay_ms": 8000
+    },
+    {
+      "id": "choice_09",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Totally. Like spinning plates?",
+            "it": "Assolutamente. Come tenere i piatti in equilibrio?",
+            "ka": "სრულიად. როგორც თეფშების ტრიალი?",
+            "fa": "کاملا. مثل بشقاب چرخوندن؟"
+          },
+          "points": 1,
+          "reaction_delay_ms": 2000,
+          "branch_lines": [
+            {
+              "en": "Exactly.",
+              "it": "Esatto.",
+              "ka": "ზუსტად.",
+              "fa": "دقیقا."
+            },
+            {
+              "en": "And everyone is watching to see which plate drops first.",
+              "it": "E tutti guardano per vedere quale piatto cade prima.",
+              "ka": "და ყველა უყურებს რომელი თეფში ჩამოვარდება პირველი.",
+              "fa": "و همه دارن نگاه میکنن ببینن کدوم بشقاب اول میفته."
+            },
+            {
+              "en": "It's exhausting.",
+              "it": "È estenuante.",
+              "ka": "ამომწურავია.",
+              "fa": "خسته‌کننده‌ست."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "You just need to relax more. You overthink things.",
+            "it": "Devi solo rilassarti di più. Pensi troppo.",
+            "ka": "უბრალოდ მეტი დასვენება გჭირდება. ზედმეტად ფიქრობ.",
+            "fa": "فقط باید بیشتر ریلکس کنی. زیاد فکر میکنی."
+          },
+          "points": 0,
+          "reaction_delay_ms": 6000,
+          "branch_narrative": {
+            "en": "He shifts further away on the bench.",
+            "it": "Si sposta più lontano sulla panchina.",
+            "ka": "სკამზე უფრო შორს იწევს.",
+            "fa": "رو نیمکت بیشتر فاصله میگیره."
+          },
+          "branch_lines": [
+            {
+              "en": "Right. 'Just relax.'",
+              "it": "Certo. 'Rilassati e basta.'",
+              "ka": "ჰო. 'უბრალოდ დაისვენე.'",
+              "fa": "آره. 'فقط ریلکس کن.'"
+            },
+            {
+              "en": "I'll add that to the to-do list.",
+              "it": "Lo aggiungo alla lista delle cose da fare.",
+              "ka": "სიაში ჩავიწერ.",
+              "fa": "اضافش میکنم به لیست کارام."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_27",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "I think I might drop out of the rec league soccer team.",
+          "it": "Penso che potrei lasciare la squadra di calcetto amatoriale.",
+          "ka": "ვფიქრობ ფეხბურთის სამოყვარულო გუნდიდან წამოვიდე.",
+          "fa": "فکر کنم از تیم فوتبال تفریحی کنار بکشم."
+        }
+      ],
+      "reaction_delay_ms": 10000
+    },
+    {
+      "id": "choice_10",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Oh? How come? You loved that.",
+            "it": "Oh? Come mai? Ti piaceva tanto.",
+            "ka": "ოჰ? რატომ? ძალიან გიყვარდა.",
+            "fa": "اوه؟ چرا؟ عاشقش بودی."
+          },
+          "points": 1,
+          "reaction_delay_ms": 3000,
+          "branch_lines": [
+            {
+              "en": "Just... the uniforms. And the locker room.",
+              "it": "Solo... le divise. E lo spogliatoio.",
+              "ka": "უბრალოდ... ფორმა. და გასახდელი.",
+              "fa": "فقط... لباس‌فرما. و رختکن."
+            },
+            {
+              "en": "Too much perceived observation.",
+              "it": "Troppe occhiate addosso.",
+              "ka": "ზედმეტი დაკვირვების შეგრძნება.",
+              "fa": "خیلی حس میکنم زل زدن بهم."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "What? No way, exercise is good for you!",
+            "it": "Cosa? Ma dai, l'esercizio ti fa bene!",
+            "ka": "რა? არავითარ შემთხვევაში, ვარჯიში კარგია შენთვის!",
+            "fa": "چی؟ نه بابا، ورزش بهت خوب میکنه!"
+          },
+          "points": 0,
+          "reaction_delay_ms": 2000,
+          "branch_lines": [
+            {
+              "en": "It's not about the exercise.",
+              "it": "Non si tratta dell'esercizio.",
+              "ka": "ვარჯიში არ არის საქმე.",
+              "fa": "بحث ورزش نیست."
+            },
+            {
+              "en": "I do enough of that on my own. Believe me.",
+              "it": "Ne faccio abbastanza da solo. Credimi.",
+              "ka": "საკმარისად ვვარჯიშობ მარტო. დამიჯერე.",
+              "fa": "خودم به اندازه کافی انجام میدم. باور کن."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_28",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "narrative_action": {
+        "en": "He looks at your half-eaten pretzel.",
+        "it": "Guarda il tuo pretzel mangiato a metà.",
+        "ka": "შენს ნახევრად შეჭმულ პრეცელს უყურებს.",
+        "fa": "به برتزل نصفه‌خورده‌ات نگاه میکنه."
+      },
+      "lines": [
+        {
+          "en": "You gonna finish that?",
+          "it": "Lo finisci quello?",
+          "ka": "დაამთავრებ?",
+          "fa": "تمومش میکنی اونو؟"
+        }
+      ],
+      "reaction_delay_ms": 5000
+    },
+    {
+      "id": "choice_11",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Probably not. You want the rest?",
+            "it": "Probabilmente no. Vuoi il resto?",
+            "ka": "ალბათ არა. გინდა დანარჩენი?",
+            "fa": "احتمالا نه. بقیشو میخوای؟"
+          },
+          "points": 1,
+          "reaction_delay_ms": 4000,
+          "branch_narrative": {
+            "en": "He doesn't touch it immediately. He stares at it.",
+            "it": "Non lo tocca subito. Lo fissa.",
+            "ka": "მაშინვე არ ეხება. მიშტერებია.",
+            "fa": "فورا دستش نمیزنه. بهش زل میزنه."
+          },
+          "branch_lines": [
+            {
+              "en": "Maybe. Just... leave it there.",
+              "it": "Forse. Solo... lascialo lì.",
+              "ka": "იქნებ. უბრალოდ... იქ დატოვე.",
+              "fa": "شاید. فقط... بذارش همونجا."
+            },
+            {
+              "en": "I might have a piece.",
+              "it": "Forse ne prendo un pezzo.",
+              "ka": "შეიძლება ნაჭერი ავიღო.",
+              "fa": "شاید یه تیکه بردارم."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "Why? You hungry now? I knew you were hungry!",
+            "it": "Perché? Hai fame adesso? Lo sapevo che avevi fame!",
+            "ka": "რატომ? ახლა მოგშივდა? ვიცოდი რომ მშიერი იყავი!",
+            "fa": "چرا؟ الان گشنته؟ میدونستم گشنته!"
+          },
+          "points": 0,
+          "reaction_delay_ms": 1000,
+          "branch_narrative": {
+            "en": "He stands up abruptly.",
+            "it": "Si alza bruscamente.",
+            "ka": "მოულოდნელად დგება.",
+            "fa": "یهو بلند میشه."
+          },
+          "branch_lines": [
+            {
+              "en": "Forget it.",
+              "it": "Lascia perdere.",
+              "ka": "დაივიწყე.",
+              "fa": "ولش کن."
+            },
+            {
+              "en": "I was just asking so we didn't waste it.",
+              "it": "Chiedevo solo perché non si sprecasse.",
+              "ka": "მხოლოდ იმიტომ ვკითხე რომ არ დაგვეყარა.",
+              "fa": "فقط پرسیدم که هدر نره."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_29",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "narrative_action": {
+        "en": "He checks his phone.",
+        "it": "Controlla il telefono.",
+        "ka": "ტელეფონს ამოწმებს.",
+        "fa": "گوشیشو چک میکنه."
+      },
+      "lines": [
+        {
+          "en": "It's getting late.",
+          "it": "Si sta facendo tardi.",
+          "ka": "გვიანდება.",
+          "fa": "داره دیر میشه."
+        }
+      ],
+      "reaction_delay_ms": 3000
+    },
+    {
+      "id": "choice_12",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "It's only 8:30. But we can head back if you're tired.",
+            "it": "Sono solo le 8:30. Ma possiamo tornare se sei stanco.",
+            "ka": "მხოლოდ 8:30-ია. მაგრამ შეგვიძლია უკან წავიდეთ თუ დაიღალე.",
+            "fa": "تازه ساعت ۸:۳۰ شده. ولی اگه خسته‌ای میتونیم برگردیم."
+          },
+          "points": 1,
+          "reaction_delay_ms": 2000,
+          "branch_lines": [
+            {
+              "en": "Yeah. Just... social battery is drained. Sorry.",
+              "it": "Sì. Solo... la batteria sociale è scarica. Scusa.",
+              "ka": "კი. უბრალოდ... სოციალური ბატარეა ამოიწურა. ბოდიში.",
+              "fa": "آره. فقط... باتری اجتماعیم تموم شده. ببخشید."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "You just got here! Don't be lame.",
+            "it": "Sei appena arrivato! Non fare il noioso.",
+            "ka": "ახლახან მოხვედი! ნუ ხარ მოსაწყენი.",
+            "fa": "تازه اومدی! ضدحال نزن."
+          },
+          "points": 0,
+          "reaction_delay_ms": 3000,
+          "branch_lines": [
+            {
+              "en": "I'm not being lame. I have a headache.",
+              "it": "Non sto facendo il noioso. Ho mal di testa.",
+              "ka": "მოსაწყენი არ ვარ. თავი მტკივა.",
+              "fa": "ضدحال نمیزنم. سرم درد میکنه."
+            },
+            {
+              "en": "Why is it always a big deal with you?",
+              "it": "Perché con te è sempre un dramma?",
+              "ka": "რატომ არის შენთან ყოველთვის დიდი პრობლემა?",
+              "fa": "چرا با تو همیشه همه چی بزرگه؟"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_30",
+      "type": "narrative_block",
+      "description": {
+        "en": "You start walking back towards the transit stop. The wind is picking up.",
+        "it": "Iniziate a tornare verso la fermata. Il vento si alza.",
+        "ka": "გაჩერებისკენ ბრუნდებით. ქარი ძლიერდება.",
+        "fa": "شروع میکنید به برگشتن سمت ایستگاه. باد داره تندتر میشه."
+      }
+    },
+    {
+      "id": "node_31",
+      "type": "dialogue_block",
+      "speaker": "Player",
+      "lines": [
+        {
+          "en": "Hey, seriously though. If things are tough...",
+          "it": "Ehi, seriamente però. Se le cose sono difficili...",
+          "ka": "ჰეი, სერიოზულად. თუ რთულია...",
+          "fa": "هی، جدی میگم. اگه اوضاع سخته..."
+        }
+      ]
+    },
+    {
+      "id": "choice_13",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "...I'm around. For whatever. No pressure.",
+            "it": "...ci sono. Per qualsiasi cosa. Senza pressione.",
+            "ka": "...აქ ვარ. ნებისმიერ საკითხზე. ზეწოლის გარეშე.",
+            "fa": "...هستم. برای هرچی. بدون فشار."
+          },
+          "points": 1,
+          "reaction_delay_ms": 4000,
+          "branch_lines": [
+            {
+              "en": "I know.",
+              "it": "Lo so.",
+              "ka": "ვიცი.",
+              "fa": "میدونم."
+            },
+            {
+              "en": "Thanks for not being... weird tonight.",
+              "it": "Grazie per non essere stato... strano stasera.",
+              "ka": "მადლობა რომ არ იყავი... უცნაური ამ საღამოს.",
+              "fa": "ممنون که امشب... عجیب نبودی."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "...You know you can tell me. Is it the food thing?",
+            "it": "...Lo sai che puoi dirmelo. È la cosa del cibo?",
+            "ka": "...იცი რომ შეგიძლია მითხრა. საჭმელის თემაა?",
+            "fa": "...میدونی میتونی بگی بهم. مربوط به غذاست؟"
+          },
+          "points": 0,
+          "reaction_delay_ms": 2000,
+          "branch_lines": [
+            {
+              "en": "There is no 'food thing'.",
+              "it": "Non c'è nessuna 'cosa del cibo'.",
+              "ka": "არ არის არავითარი 'საჭმელის თემა'.",
+              "fa": "هیچ 'موضوع غذایی' وجود نداره."
+            },
+            {
+              "en": "God, you sound like my mother.",
+              "it": "Dio, sembri mia madre.",
+              "ka": "ღმერთო, ჩემს დედას ჰგავხარ.",
+              "fa": "خدا، صدات شبیه مامانم شده."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_32",
+      "type": "narrative_block",
+      "description": {
+        "en": "You arrive at the split in the path. Andreas's bus is approaching.",
+        "it": "Arrivate al bivio del sentiero. L'autobus di Andreas si sta avvicinando.",
+        "ka": "გზის გასაყარზე მოხვდით. ანდრეასის ავტობუსი მოდის.",
+        "fa": "به دوراهی مسیر میرسید. اتوبوس آندریاس داره نزدیک میشه."
+      }
+    },
+    {
+      "id": "choice_14",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "Cool. Text me when you get home?",
+            "it": "Bene. Mi scrivi quando arrivi a casa?",
+            "ka": "კარგი. მომწერე როცა სახლში მიხვალ?",
+            "fa": "باشه. وقتی رسیدی خونه پیام بده؟"
+          },
+          "points": 1,
+          "reaction_delay_ms": 1000,
+          "branch_narrative": {
+            "en": "He looks relieved.",
+            "it": "Sembra sollevato.",
+            "ka": "შემსუბუქებული ჩანს.",
+            "fa": "بنظر خیالش راحت شده."
+          },
+          "branch_lines": [
+            {
+              "en": "Will do.",
+              "it": "Lo farò.",
+              "ka": "მოვიქცევი ასე.",
+              "fa": "حتما."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "Let's do this again soon. Like, dinner for real next time.",
+            "it": "Rifacciamolo presto. Tipo, cena vera la prossima volta.",
+            "ka": "მალე გავიმეოროთ ეს. ტიპის, ნამდვილი ვახშამი შემდეგ ჯერზე.",
+            "fa": "بیا بازم زود بریم. یعنی شام واقعی دفعه بعد."
+          },
+          "points": 0,
+          "reaction_delay_ms": 3000,
+          "branch_narrative": {
+            "en": "He avoids eye contact.",
+            "it": "Evita il contatto visivo.",
+            "ka": "თვალებში ყურებას გაურბის.",
+            "fa": "از تماس چشمی فرار میکنه."
+          },
+          "branch_lines": [
+            {
+              "en": "We'll see.",
+              "it": "Vedremo.",
+              "ka": "ვნახავთ.",
+              "fa": "ببینیم."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "node_33",
+      "type": "dialogue_block",
+      "speaker": "Andreas",
+      "lines": [
+        {
+          "en": "Hey...",
+          "it": "Ehi...",
+          "ka": "ჰეი...",
+          "fa": "هی..."
+        }
+      ],
+      "reaction_delay_ms": 2000
+    },
+    {
+      "id": "choice_15",
+      "type": "player_choice",
+      "options": [
+        {
+          "option_id": "A",
+          "text": {
+            "en": "(Wait silently)",
+            "it": "(Aspetta in silenzio)",
+            "ka": "(ჩუმად დაელოდე)",
+            "fa": "(ساکت صبر کن)"
+          },
+          "points": 1,
+          "reaction_delay_ms": 5000,
+          "branch_lines": [
+            {
+              "en": "It's just... hard to explain. Being in my head.",
+              "it": "È solo... difficile da spiegare. Stare nella mia testa.",
+              "ka": "უბრალოდ... რთული ასახსნელია. ჩემს თავში ყოფნა.",
+              "fa": "فقط... سخته توضیحش. بودن تو سرم."
+            }
+          ]
+        },
+        {
+          "option_id": "B",
+          "text": {
+            "en": "What?",
+            "it": "Cosa?",
+            "ka": "რა?",
+            "fa": "چی؟"
+          },
+          "points": 0,
+          "reaction_delay_ms": 1000,
+          "branch_lines": [
+            {
+              "en": "Nothing. Nevermind.",
+              "it": "Niente. Lascia stare.",
+              "ka": "არაფერი. დაივიწყე.",
+              "fa": "هیچی. ولش کن."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scene_end",
+      "type": "system_event",
+      "event": "calculate_score"
+    }
+  ],
+  "endings": {
+    "good": {
+      "threshold": 14,
+      "post_scene_label": {
+        "en": "— 20 minutes later —",
+        "it": "— 20 minuti dopo —",
+        "ka": "— 20 წუთის შემდეგ —",
+        "fa": "— ۲۰ دقیقه بعد —"
+      },
+      "final_texts": [
+        { "en": "home safe", "it": "a casa sano e salvo", "ka": "სახლში ვარ უვნებლად", "fa": "رسیدم خونه" },
+        { "en": "thanks for tonight", "it": "grazie per stasera", "ka": "მადლობა ამ საღამოსთვის", "fa": "ممنون بابت امشب" },
+        { "en": "honestly things have been kind of overwhelming lately", "it": "sinceramente le cose sono state un po' schiaccianti ultimamente", "ka": "სიმართლე რომ ვთქვა ყველაფერი ცოტა დამღლელი იყო ბოლო დროს", "fa": "راستش اوضاع این اواخر یکم سنگین بوده" },
+        { "en": "idk", "it": "boh", "ka": "არ ვიცი", "fa": "نمیدونم" },
+        { "en": "maybe i can come over sometime and we just watch a movie?", "it": "magari posso venire da te qualche volta e guardare solo un film?", "ka": "იქნებ ოდესმე მოგინახულო და უბრალოდ ფილმი ვნახოთ?", "fa": "شاید یه وقتی بیام پیشت فقط فیلم ببینیم؟" },
+        { "en": "(no dinner plans lol)", "it": "(niente piani per la cena lol)", "ka": "(ვახშმის გეგმების გარეშე ლოლ)", "fa": "(بدون برنامه شام لول)" }
+      ]
+    },
+    "neutral": {
+      "threshold": 8,
+      "post_scene_label": {
+        "en": "— 20 minutes later —",
+        "it": "— 20 minuti dopo —",
+        "ka": "— 20 წუთის შემდეგ —",
+        "fa": "— ۲۰ دقیقه بعد —"
+      },
+      "final_texts": [
+        { "en": "home", "it": "a casa", "ka": "სახლში", "fa": "خونم" },
+        { "en": "sorry i was kind of boring tonight", "it": "scusa se sono stato un po' noioso stasera", "ka": "ბოდიში ცოტა მოსაწყენი ვიყავი ამ საღამოს", "fa": "ببخشید امشب یکم حوصله‌سربر بودم" },
+        { "en": "just tired", "it": "solo stanco", "ka": "უბრალოდ დაღლილი ვარ", "fa": "فقط خسته‌ام" },
+        { "en": "catch u later", "it": "ci sentiamo", "ka": "მოგვიანებით მოგწერ", "fa": "بعدا حرف میزنیم" }
+      ]
+    },
+    "bad": {
+      "threshold": 0,
+      "post_scene_label": {
+        "en": "— 20 minutes later —",
+        "it": "— 20 minuti dopo —",
+        "ka": "— 20 წუთის შემდეგ —",
+        "fa": "— ۲۰ دقیقه بعد —"
+      },
+      "final_texts": [
+        { "en": "hey", "it": "ehi", "ka": "ჰეი", "fa": "هی" },
+        { "en": "im gonna be super busy for the next few weeks", "it": "sarò super impegnato per le prossime settimane", "ka": "მომავალ კვირებში ძალიან დაკავებული ვიქნები", "fa": "چند هفته آینده خیلی سرم شلوغه" },
+        { "en": "probably cant hang out for a while", "it": "probabilmente non potrò uscire per un po'", "ka": "ალბათ ვერ შევხვდებით ცოტა ხანს", "fa": "احتمالا تا یه مدت نمیتونم بیام بیرون" },
+        { "en": "just a heads up", "it": "solo per avvisarti", "ka": "უბრალოდ გაგაფრთხილე", "fa": "فقط گفتم بدونی" }
+      ]
+    }
+  }
+}
