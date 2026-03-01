@@ -5,12 +5,7 @@
 //  Created by Elizbar Kheladze on 23/02/26.
 //
 
-// ChatComponents.swift
-// AWARE — Shared Chat UI Components (pure Swift Concurrency, warm boxes)
-
 import SwiftUI
-
-// MARK: ─── Top Bar ──────────────────────────────────────────────────
 
 struct TopBar: View {
     let title: String
@@ -215,9 +210,8 @@ struct TypingDots: View {
             HStack(spacing: 3) {
                 ForEach(0..<3, id: \.self) { i in
                     Circle()
-                        .fill(G.warm.opacity(i <= phase ? 0.7 : 0.15))
+                        .fill(G.warm.opacity(dotOpacity(for: i)))
                         .frame(width: 4, height: 4)
-                        .animation(.easeInOut(duration: 0.2), value: phase)
                 }
             }
         }
@@ -226,19 +220,111 @@ struct TypingDots: View {
         .onAppear {
             animTask = Task {
                 while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 400_000_000)
-                    phase = (phase + 1) % 3
+                    try? await Task.sleep(nanoseconds: 350_000_000)
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        phase = (phase + 1) % 4 // 0, 1, 2, 3 (3 is all off)
+                    }
                 }
             }
         }
         .onDisappear { animTask?.cancel() }
+    }
+    
+    private func dotOpacity(for index: Int) -> Double {
+        if phase == 3 { return 0.15 }
+        return index == phase ? 0.75 : 0.2
+    }
+}
+
+// MARK: ─── Player Typing Indicator ──────────────────────────────────
+
+struct PlayerTypingDots: View {
+    @State private var phase = 0
+    @State private var animTask: Task<Void, Never>?
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Spacer()
+            HStack(spacing: 3) {
+                ForEach(0..<3, id: \.self) { i in
+                    Circle()
+                        .fill(G.playerBorder.opacity(dotOpacity(for: i)))
+                        .frame(width: 4, height: 4)
+                }
+            }
+            Text("you are typing")
+                .font(G.dynamicMono(.caption2))
+                .foregroundColor(G.dim)
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.trailing, 4)
+        .onAppear {
+            animTask = Task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 350_000_000)
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        phase = (phase + 1) % 4
+                    }
+                }
+            }
+        }
+        .onDisappear { animTask?.cancel() }
+    }
+    
+    private func dotOpacity(for index: Int) -> Double {
+        if phase == 3 { return 0.2 }
+        return index == phase ? 0.85 : 0.25
+    }
+}
+
+// MARK: ─── Center Typing Indicator (for middle area) ────────────────
+
+struct CenterTypingIndicator: View {
+    let text: String
+    let color: Color
+    
+    @State private var phase = 0
+    @State private var animTask: Task<Void, Never>?
+    
+    var body: some View {
+        HStack(spacing: 6) {
+            Spacer()
+            Text(text)
+                .font(G.dynamicMono(.caption2, .medium))
+                .tracking(2)
+                .foregroundColor(G.dim.opacity(0.6))
+            HStack(spacing: 3) {
+                ForEach(0..<3, id: \.self) { i in
+                    Circle()
+                        .fill(color.opacity(dotOpacity(for: i)))
+                        .frame(width: 3, height: 3)
+                }
+            }
+            Spacer()
+        }
+        .onAppear {
+            animTask = Task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 400_000_000)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        phase = (phase + 1) % 4
+                    }
+                }
+            }
+        }
+        .onDisappear { animTask?.cancel() }
+    }
+    
+    private func dotOpacity(for index: Int) -> Double {
+        if phase == 3 { return 0.25 }
+        return index == phase ? 0.75 : 0.2
     }
 }
 
 // MARK: ─── Thinking Indicator (encounter) ───────────────────────────
 
 struct ThinkingDots: View {
-    @State private var opacity: Double = 0.25
+    @State private var opacity: Double = 0.3
     
     var body: some View {
         HStack(spacing: 6) {
@@ -252,8 +338,8 @@ struct ThinkingDots: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 4)
         .onAppear {
-            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
-                opacity = 0.65
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                opacity = 0.7
             }
         }
     }

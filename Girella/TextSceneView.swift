@@ -5,15 +5,12 @@
 //  Created by Elizbar Kheladze on 23/02/26.
 //
 
-// TextSceneView.swift
-// AWARE — Text Message Thread UI
-// FIX: Messages remain visible above the pinned choice panel at the bottom.
-
 import SwiftUI
 
 struct TextSceneView: View {
     let coordinator: GameCoordinator
     let onExit: () -> Void
+    let savedState: (nodeIndex: Int, bubbles: [ChatBubble])?  // NEW: Optional saved state
     
     @State private var vm: TextSceneVM?
     @State private var hasStarted = false
@@ -26,6 +23,7 @@ struct TextSceneView: View {
         return TextSceneVM(
             scene: coordinator.textScene,
             settings: coordinator.settings,
+            coordinator: coordinator,
             onPoints: { _ in },
             onTransition: {}
         )
@@ -53,12 +51,6 @@ struct TextSceneView: View {
                                 ))
                         }
                         
-                        if viewModel.isTyping {
-                            TypingDots(label: "andreas is typing")
-                                .id("typing_indicator")
-                                .transition(.opacity.combined(with: .scale(scale: 0.9)))
-                        }
-                        
                         // Invisible anchor to scroll to — sits below all content
                         Color.clear
                             .frame(height: 1)
@@ -83,13 +75,49 @@ struct TextSceneView: View {
                 }
             }
             
-            // ─── Choice panel pinned at bottom ───
-            if viewModel.choicesVisible && !viewModel.choices.isEmpty {
-                ChoicePanel(choices: viewModel.choices, lang: lang) { choice in
-                    viewModel.selectChoice(choice)
+            // ─── Choice panel pinned at bottom (always present) ───
+            VStack(spacing: 8) {
+                Rectangle().fill(G.sage.opacity(0.1)).frame(height: 1)
+                
+                if viewModel.isPlayerTyping {
+                    // Show player typing indicator in the middle
+                    CenterTypingIndicator(text: "you are typing", color: G.playerBorder)
+                        .padding(.vertical, 24)
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                } else if viewModel.isTyping {
+                    // Show NPC typing indicator in the middle
+                    CenterTypingIndicator(text: "andreas is typing", color: G.sage)
+                        .padding(.vertical, 24)
+                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
+                    ForEach(viewModel.choices) { c in
+                        ChoiceBtn(text: c.text, lang: lang) { 
+                            viewModel.selectChoice(c) 
+                        }
+                    }
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.95, anchor: .bottom).combined(with: .opacity),
+                        removal: .opacity
+                    ))
+                } else {
+                    // Show game name when no choices available
+                    Text("GIRELLA")
+                        .font(G.dynamicMono(.caption2, .medium))
+                        .tracking(4)
+                        .foregroundColor(G.dim.opacity(0.4))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 24)
+                        .transition(.opacity)
                 }
-                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
+            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isTyping)
+            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isPlayerTyping)
+            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.choicesVisible)
+            .padding(.horizontal, 18)
+            .padding(.top, 10)
+            .padding(.bottom, 14)
+            .background(G.surface.ignoresSafeArea(edges: .bottom))
+            .frame(minHeight: 100)
             
             // ─── Transition button ───
             if viewModel.showTransitionButton {
@@ -123,7 +151,6 @@ struct TextSceneView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.choicesVisible)
         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showTransitionButton)
         .environment(\.layoutDirection, lang.direction)
         .onAppear {
@@ -131,6 +158,7 @@ struct TextSceneView: View {
                 vm = TextSceneVM(
                     scene: coordinator.textScene,
                     settings: coordinator.settings,
+                    coordinator: coordinator,
                     onPoints: { [coordinator] p in 
                         coordinator.addPoints(p) 
                     },
@@ -141,7 +169,13 @@ struct TextSceneView: View {
                 )
             }
             if !hasStarted {
-                viewModel.start()
+                if let saved = savedState {
+                    // Load from save
+                    viewModel.loadState(nodeIndex: saved.nodeIndex, bubbles: saved.bubbles)
+                } else {
+                    // Start fresh
+                    viewModel.start()
+                }
                 hasStarted = true
             }
         }

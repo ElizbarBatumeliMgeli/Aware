@@ -4,12 +4,8 @@
 //
 //  Created by Elizbar Kheladze on 22/02/26.
 //
-// Models.swift
-// AWARE — Data Models
 
 import Foundation
-
-// MARK: ─── Localized Text ───────────────────────────────────────────
 
 struct LText: Codable {
     let en: String
@@ -26,8 +22,6 @@ struct LText: Codable {
         }
     }
 }
-
-// MARK: ─── Text Message Scene ───────────────────────────────────────
 
 struct TextScene: Codable {
     let chapter: Int
@@ -155,14 +149,21 @@ struct Ending: Codable {
 
 // MARK: ─── UI Display Models ────────────────────────────────────────
 
-struct ChatBubble: Identifiable, Equatable {
-    let id = UUID()
+struct ChatBubble: Identifiable, Equatable, Codable {
+    let id: UUID
     let kind: BubbleKind
     let text: String
+    
+    init(id: UUID = UUID(), kind: BubbleKind, text: String) {
+        self.id = id
+        self.kind = kind
+        self.text = text
+    }
+    
     static func == (lhs: ChatBubble, rhs: ChatBubble) -> Bool { lhs.id == rhs.id }
 }
 
-enum BubbleKind: Equatable {
+enum BubbleKind: String, Equatable, Codable {
     case npc
     case player
     case narrative
@@ -173,11 +174,18 @@ enum BubbleKind: Equatable {
     case endingBad
 }
 
-struct ActiveChoice: Identifiable {
-    let id = UUID()
+struct ActiveChoice: Identifiable, Codable {
+    let id: UUID
     let text: String
     let points: Int
     let tag: String
+    
+    init(id: UUID = UUID(), text: String, points: Int, tag: String) {
+        self.id = id
+        self.text = text
+        self.points = points
+        self.tag = tag
+    }
 }
 
 // MARK: ─── JSON Loader ──────────────────────────────────────────────

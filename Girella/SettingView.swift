@@ -5,14 +5,16 @@
 //  Created by Elizbar Kheladze on 22/02/26.
 //
 
-// SettingsView.swift
-// AWARE — Settings
-
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     @Environment(SettingsManager.self) var settings: SettingsManager
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query private var gameSaves: [GameSave]
+    
+    @State private var showResetConfirm = false
     
     var body: some View {
         ZStack {
@@ -64,6 +66,35 @@ struct SettingsView: View {
                             }
                         }
                         
+                        // Reset Game Section
+                        if !gameSaves.isEmpty {
+                            SettingsGroup(title: "GAME DATA") {
+                                Button {
+                                    showResetConfirm = true
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "arrow.counterclockwise")
+                                            .font(.caption)
+                                        Text("Reset Game Progress")
+                                            .font(G.dynamicMono(.subheadline))
+                                        Spacer()
+                                    }
+                                    .foregroundColor(G.rose)
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 12)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                            .fill(G.rose.opacity(0.08))
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                            .stroke(G.rose.opacity(0.2), lineWidth: 1)
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        
                         VStack(alignment: .leading, spacing: 8) {
                             Text("ABOUT")
                                 .font(G.dynamicMono(.caption2, .semibold))
@@ -86,6 +117,25 @@ struct SettingsView: View {
             }
         }
         .presentationBackground(G.bg)
+        .alert("Reset Game Progress?", isPresented: $showResetConfirm) {
+            Button("Cancel", role: .cancel) { }
+            Button("Reset", role: .destructive) {
+                resetGameProgress()
+            }
+        } message: {
+            Text("This will delete your saved game and start fresh. This action cannot be undone.")
+        }
+    }
+    
+    private func resetGameProgress() {
+        for save in gameSaves {
+            modelContext.delete(save)
+        }
+        do {
+            try modelContext.save()
+        } catch {
+            print("Error resetting game: \(error)")
+        }
     }
 }
 

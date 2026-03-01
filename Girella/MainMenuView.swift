@@ -5,18 +5,23 @@
 //  Created by Elizbar Kheladze on 22/02/26.
 //
 
-// MainMenuView.swift
-// AWARE — Main Menu
-
 import SwiftUI
+import SwiftData
 
 struct MainMenuView: View {
     @Environment(SettingsManager.self) var settings: SettingsManager
+    @Environment(\.modelContext) private var modelContext
+    @Query private var gameSaves: [GameSave]
+    
     @State private var showGame = false
     @State private var showSettings = false
     @State private var titleIn = false
     @State private var btnsIn = false
     @State private var glow: Double = 0.3
+    
+    private var hasSavedGame: Bool {
+        !gameSaves.isEmpty
+    }
     
     var body: some View {
         NavigationStack {
@@ -46,7 +51,12 @@ struct MainMenuView: View {
                     Spacer()
                     
                     VStack(spacing: 14) {
-                        MenuBtn(label: "PLAY", accent: G.warm) { showGame = true }
+                        MenuBtn(
+                            label: hasSavedGame ? "CONTINUE" : "PLAY",
+                            accent: G.warm
+                        ) { 
+                            showGame = true 
+                        }
                         MenuBtn(label: "SETTINGS", accent: G.text2) { showSettings = true }
                     }
                     .opacity(btnsIn ? 1 : 0)
@@ -61,7 +71,7 @@ struct MainMenuView: View {
             }
             .navigationBarHidden(true)
             .navigationDestination(isPresented: $showGame) {
-                GameContainerView()
+                GameContainerView(existingSave: gameSaves.first)
                     .environment(settings)
             }
             .sheet(isPresented: $showSettings) {

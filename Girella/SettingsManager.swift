@@ -5,12 +5,7 @@
 //  Created by Elizbar Kheladze on 22/02/26.
 //
 
-// SettingsManager.swift
-// AWARE — Persistent User Preferences
-
 import SwiftUI
-
-// MARK: - Language
 
 enum AppLanguage: String, CaseIterable, Identifiable, Codable {
     case english  = "en"
@@ -35,8 +30,6 @@ enum AppLanguage: String, CaseIterable, Identifiable, Codable {
     var hAlign: HorizontalAlignment { isRTL ? .trailing : .leading }
 }
 
-// MARK: - Pacing
-
 enum Pacing: String, CaseIterable, Identifiable, Codable {
     case fast   = "fast"
     case medium = "medium"
@@ -46,34 +39,70 @@ enum Pacing: String, CaseIterable, Identifiable, Codable {
     
     var label: String {
         switch self {
-        case .fast:   return "⚡  Fast"
-        case .medium: return "⏱  Medium (2 s)"
-        case .native: return "💬  Native (typing)"
+        case .fast:   return "Fast"
+        case .medium: return "Medium"
+        case .native: return "Native"
         }
     }
     
-    /// Returns nanoseconds to sleep before showing the next NPC message.
-    func ns(charCount: Int) -> UInt64 {
+    // Typing indicator duration - simulates NPC typing
+    func typingDelayNs(charCount: Int) -> UInt64 {
+        let chars = max(charCount, 10) // Minimum 10 chars for calculation
         switch self {
-        case .fast:   return 150_000_000                              // 0.15 s — near-instant
-        case .medium: return 2_000_000_000                            // 2 s
+        case .fast:
+            // Fast: quick typing (30 chars/sec) + 0.3-0.8s base
+            let secs = min(max(Double(chars) / 30.0, 0.3), 0.8)
+            return UInt64(secs * 1_000_000_000)
+        case .medium:
+            // Medium: moderate typing (20 chars/sec) + 0.5-2s base
+            let secs = min(max(Double(chars) / 20.0, 0.5), 2.0)
+            return UInt64(secs * 1_000_000_000)
         case .native:
-            let secs = min(max(Double(charCount) * 0.055, 0.8), 7.0)
+            // Native: realistic typing (15 chars/sec) + 0.8-3.5s base
+            let secs = min(max(Double(chars) / 15.0, 0.8), 3.5)
             return UInt64(secs * 1_000_000_000)
         }
     }
     
-    /// Delay for encounter reaction beats.
-    func encounterNs(baseMs: Int?) -> UInt64 {
-        guard let ms = baseMs, ms > 0 else { return ns(charCount: 20) }
+    // Delay before NPC starts typing (simulates "picking up phone" or "thinking")
+    var responseDelayNs: UInt64 {
         switch self {
-        case .fast:   return 200_000_000
-        case .medium: return UInt64(ms) * 1_000_000
-        case .native: return UInt64(ms) * 1_000_000
+        case .fast:   return 200_000_000   // 0.2s - nearly instant
+        case .medium: return 800_000_000   // 0.8s - slight pause
+        case .native: return 1_500_000_000 // 1.5s - realistic pause
         }
     }
     
-    /// Transition screen wait: 0 for fast, brief otherwise.
+    // Additional "thinking" delay when player texts and NPC is away/sleeping
+    func scriptedDelayNs(baseMs: Int?) -> UInt64 {
+        guard let ms = baseMs, ms > 0 else { return responseDelayNs }
+        let baseNs = UInt64(ms) * 1_000_000
+        switch self {
+        case .fast:   return min(baseNs / 4, 1_000_000_000)  // Quarter time, max 1s
+        case .medium: return min(baseNs / 2, 3_000_000_000)  // Half time, max 3s
+        case .native: return min(baseNs, 8_000_000_000)      // Full time, max 8s
+        }
+    }
+    
+    // Delay between multiple messages in a row
+    var interMessageDelayNs: UInt64 {
+        switch self {
+        case .fast:   return 200_000_000   // 0.2s
+        case .medium: return 400_000_000   // 0.4s
+        case .native: return 600_000_000   // 0.6s
+        }
+    }
+    
+    // Encounter-specific delays
+    func encounterNs(baseMs: Int?) -> UInt64 {
+        guard let ms = baseMs, ms > 0 else { return responseDelayNs }
+        switch self {
+        case .fast:   return min(UInt64(ms) * 250_000, 500_000_000)      // ~25%, max 0.5s
+        case .medium: return min(UInt64(ms) * 500_000, 2_000_000_000)    // ~50%, max 2s
+        case .native: return min(UInt64(ms) * 1_000_000, 5_000_000_000)  // 100%, max 5s
+        }
+    }
+    
     var transitionNs: UInt64 {
         switch self {
         case .fast:   return 0
@@ -83,7 +112,6 @@ enum Pacing: String, CaseIterable, Identifiable, Codable {
     }
 }
 
-// MARK: - Manager
 
 @Observable
 @MainActor

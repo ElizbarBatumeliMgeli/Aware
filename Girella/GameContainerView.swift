@@ -5,15 +5,18 @@
 //  Created by Elizbar Kheladze on 23/02/26.
 //
 
-// GameContainerView.swift
-// AWARE — Orchestrates Scene Phases
-
 import SwiftUI
+import SwiftData
 
 struct GameContainerView: View {
     @Environment(SettingsManager.self) var settings: SettingsManager
-    @State private var coordinator: GameCoordinator?
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    
+    let existingSave: GameSave?
+    
+    @State private var coordinator: GameCoordinator?
+    @State private var autoSaveTask: Task<Void, Never>?
     
     var body: some View {
         if let coordinator {
@@ -25,29 +28,135 @@ struct GameContainerView: View {
                 
                 switch coordinator.phase {
                 case .textScene:
-                    TextSceneView(coordinator: coordinator, onExit: { dismiss() })
-                        .transition(.opacity)
+                    TextSceneView(
+                        coordinator: coordinator,
+                        onExit: { handleExit() },
+                        savedState: coordinator.savedTextSceneState
+                    )
+                    .transition(.opacity)
                     
                 case .transitionToEncounter:
                     TransitionView(coordinator: coordinator)
                         .transition(.opacity)
                     
                 case .encounter:
-                    EncounterView(coordinator: coordinator, onExit: { dismiss() })
-                        .transition(.opacity)
+                    EncounterView(
+                        coordinator: coordinator,
+                        onExit: { handleExit() },
+                        savedState: coordinator.savedEncounterState
+                    )
+                    .transition(.opacity)
                     
                 case .epilogue:
-                    EpilogueView(coordinator: coordinator, onExit: { dismiss() })
+                    EpilogueView(coordinator: coordinator, onExit: { handleExit() })
                         .transition(.opacity)
                 }
             }
             .animation(G.appear, value: coordinator.phase)
             .navigationBarHidden(true)
+            .onChange(of: coordinator.phase) { oldPhase, newPhase in
+                // Save when phase changes
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 500_000_000)
+                    saveGameState(coordinator)
+                }
+            }
+            .onChange(of: coordinator.savedTextSceneState?.bubbles.count) { oldCount, newCount in
+                // Save when text scene bubbles change
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 200_000_000)
+                    saveGameState(coordinator)
+                }
+            }
+            .onChange(of: coordinator.savedEncounterState?.bubbles.count) { oldCount, newCount in
+                // Save when encounter bubbles change
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 200_000_000)
+                    saveGameState(coordinator)
+                }
+            }
+            .onAppear {
+                // Start periodic auto-save every 5 seconds
+                startAutoSave(coordinator)
+            }
+            .onDisappear {
+                autoSaveTask?.cancel()
+            }
         } else {
             Color.clear
                 .onAppear {
-                    coordinator = GameCoordinator(settings: settings)
+                    if let save = existingSave {
+                        coordinator = GameCoordinator(settings: settings, loadingFrom: save)
+                    } else {
+                        coordinator = GameCoordinator(settings: settings)
+                    }
                 }
+        }
+    }
+    
+    private func startAutoSave(_ coordinator: GameCoordinator) {
+        autoSaveTask?.cancel()
+        autoSaveTask = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 5_000_000_000) // 5 seconds
+                if !Task.isCancelled {
+                    saveGameState(coordinator)
+                }
+            }
+        }
+    }
+    
+    private func handleExit() {
+        autoSaveTask?.cancel()
+        if let coordinator {
+            saveGameState(coordinator)
+        }
+        dismiss()
+    }
+    
+    private func saveGameState(_ coordinator: GameCoordinator) {
+        let textNodeIndex = coordinator.savedTextSceneState?.nodeIndex ?? 0
+        let textBubbles = coordinator.savedTextSceneState?.bubbles ?? []
+        
+        let encounterNodeIndex = coordinator.savedEncounterState?.nodeIndex ?? 0
+        let encounterBubbles = coordinator.savedEncounterState?.bubbles ?? []
+        
+        let textBubblesJSON = try? JSONEncoder().encode(textBubbles)
+        let encounterBubblesJSON = try? JSONEncoder().encode(encounterBubbles)
+        
+        // Delete old saves
+        let descriptor = FetchDescriptor<GameSave>()
+        if let oldSaves = try? modelContext.fetch(descriptor) {
+            for save in oldSaves {
+                modelContext.delete(save)
+            }
+        }
+        
+        let phaseString: String = {
+            switch coordinator.phase {
+            case .textScene: return "textScene"
+            case .transitionToEncounter: return "transitionToEncounter"
+            case .encounter: return "encounter"
+            case .epilogue: return "epilogue"
+            }
+        }()
+        
+        let newSave = GameSave(
+            phase: phaseString,
+            totalScore: coordinator.totalScore,
+            textSceneNodeIndex: textNodeIndex,
+            encounterNodeIndex: encounterNodeIndex,
+            textSceneBubblesJSON: textBubblesJSON,
+            encounterBubblesJSON: encounterBubblesJSON
+        )
+        
+        modelContext.insert(newSave)
+        
+        do {
+            try modelContext.save()
+            print("✅ Game saved: phase=\(phaseString), score=\(coordinator.totalScore), textNode=\(textNodeIndex), encounterNode=\(encounterNodeIndex)")
+        } catch {
+            print("❌ Failed to save game: \(error)")
         }
     }
 }
@@ -228,7 +337,7 @@ struct EpilogueView: View {
             
             for text in ending.finalTexts {
                 let localized = text.l(lang)
-                try? await Task.sleep(nanoseconds: pacing.ns(charCount: localized.count))
+                try? await Task.sleep(nanoseconds: pacing.typingDelayNs(charCount: localized.count))
                 withAnimation(.spring(response: 0.4, dampingFraction: 0.75)) {
                     visibleTexts.append(localized)
                 }

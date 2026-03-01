@@ -4,12 +4,7 @@
 //
 //  Created by Elizbar Kheladze on 22/02/26.
 //
-// Theme.swift
-// AWARE — Warm Visual Theme
-
 import SwiftUI
-
-// MARK: - Color Hex Extension
 
 extension Color {
     init(hex: String) {
@@ -25,8 +20,6 @@ extension Color {
         self.init(.sRGB, red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255, opacity: Double(a) / 255)
     }
 }
-
-// MARK: - Theme
 
 enum G {
     // Background — deep warm charcoal, not pure black

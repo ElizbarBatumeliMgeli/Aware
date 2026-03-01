@@ -5,9 +5,6 @@
 //  Created by Elizbar Kheladze on 23/02/26.
 //
 
-// GameCoordinator.swift
-// AWARE — Top-level game state & scene transitions
-
 import SwiftUI
 
 enum GamePhase: Equatable {
@@ -28,7 +25,11 @@ final class GameCoordinator {
     let textScene: TextScene
     let encounterScene: EncounterScene
     
-    init(settings: SettingsManager) {
+    // Saved state to restore
+    var savedTextSceneState: (nodeIndex: Int, bubbles: [ChatBubble])?
+    var savedEncounterState: (nodeIndex: Int, bubbles: [ChatBubble])?
+    
+    init(settings: SettingsManager, loadingFrom save: GameSave? = nil) {
         self.settings = settings
         self.textScene = SceneLoader.loadTextScene(named: "text_scene_01")
             ?? TextScene(chapter: 1, sceneId: "fallback", sceneType: "text_message_thread", characters: [], nodes: [])
@@ -43,6 +44,33 @@ final class GameCoordinator {
                     neutral: Ending(threshold: 8, postSceneLabel: LText(en: "", it: "", ka: "", fa: ""), finalTexts: []),
                     bad: Ending(threshold: 0, postSceneLabel: LText(en: "", it: "", ka: "", fa: ""), finalTexts: [])
                 ))
+        
+        // Load saved state if available
+        if let save = save {
+            self.totalScore = save.totalScore
+            self.phase = {
+                switch save.phase {
+                case "textScene": return .textScene
+                case "transitionToEncounter": return .transitionToEncounter
+                case "encounter": return .encounter
+                case "epilogue": return .epilogue
+                default: return .textScene
+                }
+            }()
+            
+            // Decode saved bubbles
+            if let textData = save.textSceneBubblesJSON,
+               let textBubbles = try? JSONDecoder().decode([ChatBubble].self, from: textData) {
+                self.savedTextSceneState = (save.textSceneNodeIndex, textBubbles)
+            }
+            
+            if let encounterData = save.encounterBubblesJSON,
+               let encounterBubbles = try? JSONDecoder().decode([ChatBubble].self, from: encounterData) {
+                self.savedEncounterState = (save.encounterNodeIndex, encounterBubbles)
+            }
+            
+            print("✅ Loaded game: phase=\(save.phase), score=\(save.totalScore), textNodes=\(save.textSceneNodeIndex), encounterNodes=\(save.encounterNodeIndex)")
+        }
     }
     
     func addPoints(_ p: Int) { totalScore += p }
