@@ -30,7 +30,7 @@ struct GirellaApp: App {
         WindowGroup {
             MainMenuView()
                 .environment(settings)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }

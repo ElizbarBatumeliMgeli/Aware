@@ -65,10 +65,13 @@ struct MainMenuView: View {
                 }
             }
             .onAppear {
-                withAnimation(.easeOut(duration: 1.1)) { titleIn = true }
-                withAnimation(.easeOut(duration: 0.7).delay(0.4)) { btnsIn = true }
-                withAnimation(G.pulse) { glow = 0.55 }
-            }
+                            // NEW: Ask for notification permission when the app launches
+                            NotificationManager.shared.requestPermission()
+                            
+                            withAnimation(.easeOut(duration: 1.1)) { titleIn = true }
+                            withAnimation(.easeOut(duration: 0.7).delay(0.4)) { btnsIn = true }
+                            withAnimation(G.pulse) { glow = 0.55 }
+                        }
             .navigationBarHidden(true)
             .navigationDestination(isPresented: $showGame) {
                 GameContainerView(existingSave: gameSaves.first)

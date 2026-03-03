@@ -49,13 +49,19 @@ struct TextNode: Codable, Identifiable {
     let event: String?
     let label: LText?
     
+    let waitTimeMinutes: Int?
+    let waitMessage: LText?
+    let notificationMessage: LText? // <--- ADD THIS LINE
+    
     enum CodingKeys: String, CodingKey {
         case id, type, sender, messages, options, event, label
         case responseDelayMs = "response_delay_ms"
         case systemEvent = "system_event"
+        case waitTimeMinutes = "wait_time_minutes"
+        case waitMessage = "wait_message"
+        case notificationMessage = "notification_message" // <--- ADD THIS LINE
     }
 }
-
 struct TextChoiceOption: Codable, Identifiable {
     let optionId: String
     let text: LText
@@ -172,6 +178,7 @@ enum BubbleKind: String, Equatable, Codable {
     case endingGood
     case endingNeutral
     case endingBad
+    case image 
 }
 
 struct ActiveChoice: Identifiable, Codable {

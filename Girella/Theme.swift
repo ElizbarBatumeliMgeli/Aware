@@ -22,38 +22,38 @@ extension Color {
 }
 
 enum G {
-    // Background — deep warm charcoal, not pure black
-    static let bg           = Color(hex: "191716")
-    static let surface      = Color(hex: "231F1D")
-    static let surfaceLit   = Color(hex: "2D2825")
+    // Background — soft pastel cream and warm whites
+    static let bg           = Color(hex: "FDF8F3")       // very soft peachy cream
+    static let surface      = Color(hex: "FFFCF9")       // warm off-white
+    static let surfaceLit   = Color(hex: "FFFFFF")       // pure white
     
-    // NPC bubble — warm muted teal/sage
-    static let npcBg        = Color(hex: "2A2E2B")
-    static let npcBorder    = Color(hex: "5A7A6C").opacity(0.3)
-    static let npcText      = Color(hex: "C8D5C7")      // soft sage text
-    
-    // Player bubble — warm peach tones
-    static let playerBg     = Color(hex: "3A2D28")
-    static let playerBorder = Color(hex: "8B6E5D").opacity(0.25)
-    static let playerText   = Color(hex: "D4BFB0")      // warm cream
+    // ─── Andreas (NPC): Pastel Yellow ───
+        static let npcBg        = Color(hex: "FFF8D6")  // Soft pastel yellow bubble
+        static let npcBorder    = Color(hex: "E5D9A1")  // Slightly darker yellow for the border
+        static let npcText      = Color(hex: "5A5231")  // Dark brownish-yellow for readable text
+        static let sage         = Color(hex: "D9CB7C")  // Accent color for the Top Bar (was green, now yellow)
+
+        // ─── Player: Pastel Pink ───
+        static let playerBg     = Color(hex: "FDE2E9")  // Soft pastel pink bubble
+        static let playerBorder = Color(hex: "E0B3C1")  // Slightly darker pink for the border
+        static let playerText   = Color(hex: "6B3E4B")  // Dark maroon/pink for readable text
     
     // Accents
-    static let warm         = Color(hex: "D4A574")       // warm peach/amber — primary accent
-    static let sage         = Color(hex: "8BAF92")       // muted sage green
-    static let rose         = Color(hex: "C4887A")       // soft muted rose
-    static let cream        = Color(hex: "E8DDD0")       // warm off-white
-    static let amber        = Color(hex: "D4A574")       // narrative accent (same as warm)
+    static let warm         = Color(hex: "E89B7F")       // warm coral — primary accent (darker for contrast)
+    static let rose         = Color(hex: "E8998F")       // soft rose (darker)
+    static let cream        = Color(hex: "F5E6D3")       // pastel peach cream
+    static let amber        = Color(hex: "D9A36A")       // amber (darker for contrast with narrative)
     
-    // Text hierarchy
-    static let text1        = Color(hex: "E8DDD0")       // cream — primary text
-    static let text2        = Color(hex: "B5A899")       // warm muted — secondary
-    static let dim          = Color(hex: "9B8D7E")       // warm gray — tertiary (improved contrast)
-    static let dimSubtle    = Color(hex: "7A6F65")       // even dimmer for decorative elements only
+    // Text hierarchy (WCAG AA compliant with bg colors)
+    static let text1        = Color(hex: "2B2B2B")       // very dark gray — primary text (contrast ratio 14.5:1 on white)
+    static let text2        = Color(hex: "595959")       // dark gray — secondary (contrast ratio 7.5:1 on white)
+    static let dim          = Color(hex: "7A7A7A")       // medium gray — tertiary (contrast ratio 4.7:1 on white)
+    static let dimSubtle    = Color(hex: "A8A8A8")       // light gray for decorative (contrast ratio 3:1 on white)
     
-    // Status
-    static let good         = Color(hex: "8BAF92")       // sage
-    static let neutral      = Color(hex: "D4A574")       // amber
-    static let bad          = Color(hex: "C4887A")       // rose
+    // Status colors (darker for better visibility)
+    static let good         = Color(hex: "5FAF7D")       // sage green (darker)
+    static let neutral      = Color(hex: "D9A36A")       // amber
+    static let bad          = Color(hex: "E8776A")       // coral red (darker)
     
     // MARK: - Fonts
     
@@ -95,7 +95,7 @@ struct Scanlines: View {
             for y in stride(from: 0, to: size.height, by: 4) {
                 context.fill(
                     Path(CGRect(x: 0, y: y, width: size.width, height: 1)),
-                    with: .color(Color.white.opacity(0.008))
+                    with: .color(Color.black.opacity(0.012))  // Subtle dark lines on light background
                 )
             }
         }

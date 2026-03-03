@@ -15,15 +15,16 @@ final class EncounterVM {
     var choices: [ActiveChoice] = []
     var choicesVisible = false
     var isThinking = false
-    var isPlayerTyping = false  // NEW: Track player typing state
+    var isPlayerTyping = false
+    var isAndreasTyping = false
     
     private let scene: EncounterScene
     private let settings: SettingsManager
     private let onPoints: (Int) -> Void
     private let onFinish: () -> Void
-    private weak var coordinator: GameCoordinator?  // NEW: Keep reference to update save state
+    private weak var coordinator: GameCoordinator?
     
-    private(set) var nodeIndex = 0  // Make readable from outside
+    private(set) var nodeIndex = 0
     @ObservationIgnored
     private var runTask: Task<Void, Never>?
     
@@ -39,8 +40,8 @@ final class EncounterVM {
         self.onFinish = onFinish
     }
     
-    deinit { 
-        runTask?.cancel() 
+    deinit {
+        runTask?.cancel()
     }
     
     // MARK: - Public
@@ -56,6 +57,9 @@ final class EncounterVM {
         withAnimation(G.appear) {
             bubbles.append(ChatBubble(kind: .system, text: scene.location.l(lang)))
             bubbles.append(ChatBubble(kind: .action, text: scene.atmosphere.l(lang)))
+            
+            // ─── ADD FIRST SCENE IMAGE ───
+            bubbles.append(ChatBubble(kind: .image, text: "scene_1"))
         }
         
         runTask = Task {
@@ -64,77 +68,60 @@ final class EncounterVM {
         }
     }
     
-    // NEW: Load from saved state
     func loadState(nodeIndex: Int, bubbles: [ChatBubble]) {
         self.nodeIndex = nodeIndex
         self.bubbles = bubbles
         self.choices = []
         self.choicesVisible = false
         self.isThinking = false
-        print("📥 EncounterVM: Loaded state - nodeIndex=\(self.nodeIndex), bubbles=\(bubbles.count)")
         
-        // Check if we need to continue or if we're waiting at a choice
         guard self.nodeIndex < scene.nodes.count else {
-            print("📥 EncounterVM: At end of scene, finishing")
             onFinish()
             return
         }
         
         let currentNode = scene.nodes[self.nodeIndex]
-        print("📥 EncounterVM: Current node type=\(currentNode.type)")
         
-        // If we're at a player choice node, show the choices immediately
         if currentNode.type == "player_choice" {
-            print("📥 EncounterVM: Restoring choices at node \(self.nodeIndex)")
             showChoices(currentNode)
             return
         }
         
-        // If we're at a system event, finish
         if currentNode.type == "system_event" {
-            print("📥 EncounterVM: At system event, finishing")
             onFinish()
             return
         }
         
-        // Continue from the current position
-        print("📥 EncounterVM: Continuing from node \(self.nodeIndex)")
         runTask = Task {
             await driveFromCurrent()
         }
     }
     
-    // NEW: Update coordinator's save state
     private func updateSaveState() {
         coordinator?.savedEncounterState = (nodeIndex, bubbles)
     }
     
     func selectChoice(_ choice: ActiveChoice) {
-        // Hide choices immediately
         choicesVisible = false
         choices = []
         
-        // Add points
         onPoints(choice.points)
         
         let node = scene.nodes[nodeIndex]
         guard let option = node.options?.first(where: { $0.optionId == choice.tag }) else {
-            // Show player typing indicator, then message
             runTask = Task {
                 let typingDelay = settings.pacing.typingDelayNs(charCount: choice.text.count)
                 
-                // Show typing indicator
                 withAnimation(G.appear) { isPlayerTyping = true }
                 try? await Task.sleep(nanoseconds: typingDelay)
                 withAnimation(G.appear) { isPlayerTyping = false }
                 
-                // Show player message
                 withAnimation(G.appear) {
                     bubbles.append(ChatBubble(kind: .player, text: choice.text))
                 }
                 
-                try? await Task.sleep(nanoseconds: 300_000_000) // Brief pause
-                advance()  // This will increment nodeIndex and save
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                advance()
             }
             return
         }
@@ -144,22 +131,18 @@ final class EncounterVM {
         runTask = Task {
             let typingDelay = settings.pacing.typingDelayNs(charCount: choice.text.count)
             
-            // Show typing indicator for player
             withAnimation(G.appear) { isPlayerTyping = true }
             try? await Task.sleep(nanoseconds: typingDelay)
             withAnimation(G.appear) { isPlayerTyping = false }
             
-            // Show player message
             withAnimation(G.appear) {
                 bubbles.append(ChatBubble(kind: .player, text: choice.text))
             }
             
-            // Brief pause after player message
-            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5s
+            try? await Task.sleep(nanoseconds: 500_000_000)
             
-            // Advance nodeIndex now that choice has been made
             nodeIndex += 1
-            updateSaveState()  // Save after advancing past the choice node
+            updateSaveState()
             
             let delay = settings.pacing.encounterNs(baseMs: option.reactionDelayMs)
             if delay > 500_000_000 {
@@ -174,16 +157,21 @@ final class EncounterVM {
                 withAnimation(G.appear) {
                     bubbles.append(ChatBubble(kind: .action, text: narr.l(lang)))
                 }
-                updateSaveState()  // Save after narrative
+                updateSaveState()
                 try? await Task.sleep(nanoseconds: 400_000_000)
             }
             
             if let lines = option.branchLines {
                 for (i, line) in lines.enumerated() {
+                    let typingDelay = settings.pacing.typingDelayNs(charCount: line.l(lang).count)
+                    withAnimation(G.appear) { isAndreasTyping = true }
+                    try? await Task.sleep(nanoseconds: typingDelay)
+                    withAnimation(G.appear) { isAndreasTyping = false }
+                    
                     withAnimation(G.appear) {
                         bubbles.append(ChatBubble(kind: .npc, text: line.l(lang)))
                     }
-                    updateSaveState()  // Save after each line
+                    updateSaveState()
                     if i < lines.count - 1 {
                         try? await Task.sleep(nanoseconds: settings.pacing.interMessageDelayNs)
                     }
@@ -191,8 +179,6 @@ final class EncounterVM {
             }
             
             try? await Task.sleep(nanoseconds: 300_000_000)
-            
-            // Continue processing (nodeIndex already advanced above)
             runTask = Task { await driveFromCurrent() }
         }
     }
@@ -210,41 +196,47 @@ final class EncounterVM {
                 if let desc = node.description {
                     withAnimation(G.appear) {
                         bubbles.append(ChatBubble(kind: .narrative, text: desc.l(lang)))
+                        
+                        // ─── ADD SECOND SCENE IMAGE ───
+                        // (Injects exactly when node_21 triggers)
+                        if node.id == "node_21" {
+                            bubbles.append(ChatBubble(kind: .image, text: "scene_2"))
+                        }
                     }
-                    updateSaveState()  // Save after narrative
+                    updateSaveState()
                     try? await Task.sleep(nanoseconds: settings.pacing.typingDelayNs(charCount: desc.l(lang).count))
                 }
                 nodeIndex += 1
-                updateSaveState()  // Save after advancing node
+                updateSaveState()
                 
             case "dialogue_block":
                 await emitDialogue(node)
-                updateSaveState()  // Save after dialogue
+                updateSaveState()
                 if nodeIndex + 1 < scene.nodes.count, scene.nodes[nodeIndex + 1].type == "player_choice" {
                     nodeIndex += 1
-                    updateSaveState()  // Save before showing choices
+                    updateSaveState()
                     showChoices(scene.nodes[nodeIndex])
                     return
                 }
                 nodeIndex += 1
-                updateSaveState()  // Save after advancing node
+                updateSaveState()
                 
             case "player_choice":
-                updateSaveState()  // Save before showing choices
+                updateSaveState()
                 showChoices(node)
                 return
                 
             case "system_event":
-                updateSaveState()  // Save before finishing
+                updateSaveState()
                 onFinish()
                 return
                 
             default:
                 nodeIndex += 1
-                updateSaveState()  // Save after advancing node
+                updateSaveState()
             }
         }
-        updateSaveState()  // Save when complete
+        updateSaveState()
         onFinish()
     }
     
@@ -256,11 +248,10 @@ final class EncounterVM {
             withAnimation(G.appear) {
                 bubbles.append(ChatBubble(kind: .action, text: act.l(lang)))
             }
-            updateSaveState()  // Save after action
+            updateSaveState()
             try? await Task.sleep(nanoseconds: 300_000_000)
         }
         
-        // For NPC, show thinking/reaction delay
         if !isPlayer, let ms = node.reactionDelayMs {
             let delay = settings.pacing.encounterNs(baseMs: ms)
             if delay > 500_000_000 {
@@ -275,10 +266,17 @@ final class EncounterVM {
         if let lines = node.lines {
             let kind: BubbleKind = isPlayer ? .player : .npc
             for (i, line) in lines.enumerated() {
+                if !isPlayer {
+                    let typingDelay = settings.pacing.typingDelayNs(charCount: line.l(lang).count)
+                    withAnimation(G.appear) { isAndreasTyping = true }
+                    try? await Task.sleep(nanoseconds: typingDelay)
+                    withAnimation(G.appear) { isAndreasTyping = false }
+                }
+                
                 withAnimation(G.appear) {
                     bubbles.append(ChatBubble(kind: kind, text: line.l(lang)))
                 }
-                updateSaveState()  // Save after each line
+                updateSaveState()
                 if i < lines.count - 1 {
                     try? await Task.sleep(nanoseconds: settings.pacing.interMessageDelayNs)
                 }
@@ -298,4 +296,4 @@ final class EncounterVM {
         nodeIndex += 1
         runTask = Task { await driveFromCurrent() }
     }
-}
+}  

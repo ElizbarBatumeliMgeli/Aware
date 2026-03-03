@@ -25,8 +25,8 @@ final class GameCoordinator {
     let textScene: TextScene
     let encounterScene: EncounterScene
     
-    // Saved state to restore
-    var savedTextSceneState: (nodeIndex: Int, bubbles: [ChatBubble])?
+    // Change this line:
+    var savedTextSceneState: (nodeIndex: Int, bubbles: [ChatBubble], unlockDate: Date?)?
     var savedEncounterState: (nodeIndex: Int, bubbles: [ChatBubble])?
     
     init(settings: SettingsManager, loadingFrom save: GameSave? = nil) {
@@ -59,10 +59,11 @@ final class GameCoordinator {
             }()
             
             // Decode saved bubbles
-            if let textData = save.textSceneBubblesJSON,
-               let textBubbles = try? JSONDecoder().decode([ChatBubble].self, from: textData) {
-                self.savedTextSceneState = (save.textSceneNodeIndex, textBubbles)
-            }
+                        if let textData = save.textSceneBubblesJSON,
+                           let textBubbles = try? JSONDecoder().decode([ChatBubble].self, from: textData) {
+                            // FIX: Pass 'nil' for the unlockDate since we aren't saving it to the database yet!
+                            self.savedTextSceneState = (save.textSceneNodeIndex, textBubbles, nil)
+                        }
             
             if let encounterData = save.encounterBubblesJSON,
                let encounterBubbles = try? JSONDecoder().decode([ChatBubble].self, from: encounterData) {

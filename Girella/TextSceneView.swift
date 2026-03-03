@@ -2,24 +2,21 @@
 //  TextSceneView.swift
 //  Girella
 //
-//  Created by Elizbar Kheladze on 23/02/26.
-//
 
 import SwiftUI
 
 struct TextSceneView: View {
     let coordinator: GameCoordinator
     let onExit: () -> Void
-    let savedState: (nodeIndex: Int, bubbles: [ChatBubble])?  // NEW: Optional saved state
+    
+    // NEW: Tuple updated to include unlockDate
+    let savedState: (nodeIndex: Int, bubbles: [ChatBubble], unlockDate: Date?)?
     
     @State private var vm: TextSceneVM?
     @State private var hasStarted = false
     
     private var viewModel: TextSceneVM {
-        if let vm {
-            return vm
-        }
-        // Fallback - should not happen
+        if let vm { return vm }
         return TextSceneVM(
             scene: coordinator.textScene,
             settings: coordinator.settings,
@@ -33,125 +30,129 @@ struct TextSceneView: View {
         let lang = coordinator.settings.language
         
         VStack(spacing: 0) {
-            // Top bar
             TopBar(title: "ANDREAS", accent: G.sage, onExit: onExit)
             Rectangle().fill(G.sage.opacity(0.12)).frame(height: 1)
             
-            // ─── Chat feed (fills all space above choices) ───
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        ForEach(viewModel.bubbles) { b in
-                            BubbleView(bubble: b, lang: lang)
+                        ForEach(Array(viewModel.bubbles.enumerated()), id: \.element.id) { index, b in
+                            let isLastInGroup = b.kind == .npc && (
+                                index == viewModel.bubbles.count - 1 ||
+                                viewModel.bubbles[index + 1].kind != .npc
+                            )
+                            
+                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup)
                                 .id(b.id)
                                 .transition(.asymmetric(
-                                    insertion: .scale(scale: 0.92, anchor: .leading)
-                                        .combined(with: .opacity),
+                                    insertion: .scale(scale: 0.92, anchor: .leading).combined(with: .opacity),
                                     removal: .opacity
                                 ))
                         }
                         
-                        // Invisible anchor to scroll to — sits below all content
-                        Color.clear
-                            .frame(height: 1)
-                            .id("scroll_anchor")
+                        if viewModel.isTyping {
+                            AndreasTypingIndicator()
+                                .id("andreas_typing_indicator")
+                                .transition(.asymmetric(
+                                    insertion: .scale(scale: 0.92, anchor: .leading).combined(with: .opacity),
+                                    removal: .opacity
+                                ))
+                        }
+                        
+                        Color.clear.frame(height: 1).id("scroll_anchor")
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 12)
                     .padding(.bottom, 8)
                 }
                 .defaultScrollAnchor(.bottom)
-                .onChange(of: viewModel.bubbles.count) {
-                    scrollToAnchor(proxy)
-                }
-                .onChange(of: viewModel.isTyping) { oldTyping, newTyping in
-                    if newTyping { scrollToAnchor(proxy) }
-                }
-                .onChange(of: viewModel.choicesVisible) { oldVisible, newVisible in
-                    if newVisible {
-                        // When choices appear, scroll so messages are above them
-                        scrollToAnchor(proxy)
-                    }
-                }
-            }
-            
-            // ─── Choice panel pinned at bottom (always present) ───
-            VStack(spacing: 8) {
-                Rectangle().fill(G.sage.opacity(0.1)).frame(height: 1)
-                
-                if viewModel.isPlayerTyping {
-                    // Show player typing indicator in the middle
-                    CenterTypingIndicator(text: "you are typing", color: G.playerBorder)
-                        .padding(.vertical, 24)
-                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                } else if viewModel.isTyping {
-                    // Show NPC typing indicator in the middle
-                    CenterTypingIndicator(text: "andreas is typing", color: G.sage)
-                        .padding(.vertical, 24)
-                        .transition(.opacity.combined(with: .scale(scale: 0.95)))
-                } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
-                    ForEach(viewModel.choices) { c in
-                        ChoiceBtn(text: c.text, lang: lang) { 
-                            viewModel.selectChoice(c) 
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    VStack(spacing: 0) {
+                        // ─── BOTTOM BAR DOCK ───
+                        VStack(spacing: 8) {
+                            Rectangle().fill(G.sage.opacity(0.1)).frame(height: 1)
+                            
+                            // ─── NEW: WAIT INDICATOR ───
+                            if viewModel.isWaiting {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "clock")
+                                    Text(viewModel.waitMessage ?? "waiting...")
+                                }
+                                .font(G.dynamicMono(.caption2, .medium))
+                                .foregroundColor(G.dim)
+                                .padding(.vertical, 24)
+                                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                                
+                            } else if viewModel.isPlayerTyping {
+                                CenterTypingIndicator(text: "you are typing", color: G.playerBorder)
+                                    .padding(.vertical, 24)
+                                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                                
+                            } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
+                                ForEach(viewModel.choices) { c in
+                                    ChoiceBtn(text: c.text, lang: lang) { viewModel.selectChoice(c) }
+                                }
+                                .transition(.asymmetric(
+                                    insertion: .scale(scale: 0.95, anchor: .bottom).combined(with: .opacity),
+                                    removal: .opacity
+                                ))
+                            } else {
+                                Text("GIRELLA")
+                                    .font(G.dynamicMono(.caption2, .medium))
+                                    .tracking(4)
+                                    .foregroundColor(G.dim.opacity(0.4))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 24)
+                                    .transition(.opacity)
+                            }
+                        }
+                        .padding(.horizontal, 18)
+                        .padding(.top, 10)
+                        .padding(.bottom, 14)
+                        
+                        // Transition button
+                        if viewModel.showTransitionButton {
+                            VStack(spacing: 0) {
+                                Rectangle().fill(G.sage.opacity(0.1)).frame(height: 1)
+                                
+                                Button {
+                                    viewModel.triggerTransition()
+                                } label: {
+                                    Text("BEGIN ENCOUNTER")
+                                        .font(G.dynamicMono(.footnote, .medium))
+                                        .tracking(4)
+                                        .foregroundColor(G.sage)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 14)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                                .fill(G.sage.opacity(0.08))
+                                        )
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                                .stroke(G.sage.opacity(0.35), lineWidth: 1)
+                                        )
+                                }
+                                .buttonStyle(WarmBtnStyle())
+                                .padding(.horizontal, 18)
+                                .padding(.top, 14)
+                                .padding(.bottom, 16)
+                            }
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                         }
                     }
-                    .transition(.asymmetric(
-                        insertion: .scale(scale: 0.95, anchor: .bottom).combined(with: .opacity),
-                        removal: .opacity
-                    ))
-                } else {
-                    // Show game name when no choices available
-                    Text("GIRELLA")
-                        .font(G.dynamicMono(.caption2, .medium))
-                        .tracking(4)
-                        .foregroundColor(G.dim.opacity(0.4))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 24)
-                        .transition(.opacity)
+                    .background(G.surface)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isWaiting)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isTyping)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isPlayerTyping)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.choicesVisible)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showTransitionButton)
                 }
-            }
-            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isTyping)
-            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isPlayerTyping)
-            .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.choicesVisible)
-            .padding(.horizontal, 18)
-            .padding(.top, 10)
-            .padding(.bottom, 14)
-            .background(G.surface.ignoresSafeArea(edges: .bottom))
-            .frame(minHeight: 100)
-            
-            // ─── Transition button ───
-            if viewModel.showTransitionButton {
-                VStack(spacing: 0) {
-                    Rectangle().fill(G.sage.opacity(0.1)).frame(height: 1)
-                    
-                    Button {
-                        viewModel.triggerTransition()
-                    } label: {
-                        Text("BEGIN ENCOUNTER")
-                            .font(G.dynamicMono(.footnote, .medium))
-                            .tracking(4)
-                            .foregroundColor(G.sage)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(G.sage.opacity(0.08))
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(G.sage.opacity(0.35), lineWidth: 1)
-                            )
-                    }
-                    .buttonStyle(WarmBtnStyle())
-                    .padding(.horizontal, 18)
-                    .padding(.top, 14)
-                    .padding(.bottom, 16)
-                }
-                .background(G.surface.ignoresSafeArea(edges: .bottom))
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .onChange(of: viewModel.bubbles.count) { scrollToAnchor(proxy) }
+                .onChange(of: viewModel.isTyping) { _, newTyping in if newTyping { scrollToAnchor(proxy) } }
+                .onChange(of: viewModel.choicesVisible) { _, newVisible in if newVisible { scrollToAnchor(proxy) } }
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showTransitionButton)
         .environment(\.layoutDirection, lang.direction)
         .onAppear {
             if vm == nil {
@@ -159,21 +160,15 @@ struct TextSceneView: View {
                     scene: coordinator.textScene,
                     settings: coordinator.settings,
                     coordinator: coordinator,
-                    onPoints: { [coordinator] p in 
-                        coordinator.addPoints(p) 
-                    },
-                    onTransition: { [coordinator] in 
-                        print("🟣 TextSceneView: onTransition called")
-                        coordinator.advanceToTransition() 
-                    }
+                    onPoints: { [coordinator] p in coordinator.addPoints(p) },
+                    onTransition: { [coordinator] in coordinator.advanceToTransition() }
                 )
             }
             if !hasStarted {
                 if let saved = savedState {
-                    // Load from save
-                    viewModel.loadState(nodeIndex: saved.nodeIndex, bubbles: saved.bubbles)
+                    // NEW: Pass the unlock date when restoring save!
+                    viewModel.loadState(nodeIndex: saved.nodeIndex, bubbles: saved.bubbles, unlockDate: saved.unlockDate)
                 } else {
-                    // Start fresh
                     viewModel.start()
                 }
                 hasStarted = true

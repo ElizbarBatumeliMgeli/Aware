@@ -366,6 +366,19 @@
       "id": "time_jump_01",
       "type": "system_event",
       "event": "time_jump",
+      "wait_time_minutes": 15,
+      "wait_message": {
+        "en": "Waiting for later that evening...",
+        "it": "Aspettando più tardi...",
+        "ka": "ველოდებით საღამოს...",
+        "fa": "منتظر بعدتر همون شب..."
+      },
+      "notification_message": {
+        "en": "Check on Andreas.",
+        "it": "Controlla come sta Andreas.",
+        "ka": "შეამოწმე ანდრეასი.",
+        "fa": "از آندریاس خبر بگیر."
+      },
       "label": {
         "en": "— later that evening —",
         "it": "— più tardi quella sera —",
@@ -484,6 +497,19 @@
       "id": "node_15",
       "type": "message_block",
       "sender": "Andreas",
+      "wait_time_minutes": 5,
+      "wait_message": {
+        "en": "Andreas is away",
+        "it": "Andreas è assente",
+        "ka": "ანდრეასი არ არის",
+        "fa": "آندریاس نیست"
+      },
+      "notification_message": {
+        "en": "Andreas texted you.",
+        "it": "Andreas ti ha scritto.",
+        "ka": "ანდრეასმა მოგწერა.",
+        "fa": "آندریاس بهت پیام داد."
+      },
       "messages": [
         {
           "en": "actually",
@@ -665,8 +691,25 @@
           "ka": "10 წუთში შევხვდებით.",
           "fa": "تا ۱۰ دقیقه دیگه میبینمت."
         }
-      ],
-      "system_event": "transition_to_encounter"
+      ]
+    },
+    {
+      "id": "node_18",
+      "type": "system_event",
+      "system_event": "transition_to_encounter",
+      "wait_time_minutes": 10,
+      "wait_message": {
+        "en": "Wait for the encounter to start",
+        "it": "Attendi l'inizio dell'incontro",
+        "ka": "დაელოდეთ შეხვედრის დაწყებას",
+        "fa": "منتظر شروع دیدار باشید"
+      },
+      "notification_message": {
+        "en": "It's time to begin the encounter.",
+        "it": "È ora di iniziare l'incontro.",
+        "ka": "დროა დაიწყოს შეხვედრა.",
+        "fa": "وقت شروع دیداره."
+      }
     }
   ]
 }

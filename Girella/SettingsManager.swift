@@ -64,6 +64,15 @@ enum Pacing: String, CaseIterable, Identifiable, Codable {
         }
     }
     
+    // Add this inside the Pacing enum
+        func waitTimeSeconds(baseMinutes: Int) -> TimeInterval {
+            switch self {
+            case .fast:   return 2.0 // Just 2 seconds so you can test it instantly!
+            case .medium: return TimeInterval(baseMinutes * 60) * 0.25 // 25% of real time (60 mins = 15 mins)
+            case .native: return TimeInterval(baseMinutes * 60) // 100% of real time
+            }
+        }
+    
     // Delay before NPC starts typing (simulates "picking up phone" or "thinking")
     var responseDelayNs: UInt64 {
         switch self {
