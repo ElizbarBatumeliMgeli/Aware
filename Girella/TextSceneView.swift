@@ -97,7 +97,7 @@ struct TextSceneView: View {
                                     removal: .opacity
                                 ))
                             } else {
-                                Text("GIRELLA")
+                                Text("Aware")
                                     .font(G.dynamicMono(.caption2, .medium))
                                     .tracking(4)
                                     .foregroundColor(G.dim.opacity(0.4))

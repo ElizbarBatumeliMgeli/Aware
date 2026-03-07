@@ -40,7 +40,7 @@ struct MainMenuView: View {
                             .shadow(color: G.warm.opacity(glow), radius: 28)
                             .shadow(color: G.warm.opacity(glow * 0.3), radius: 50)
                         
-                        Text("a branching narrative")
+                        Text("Path to Andreas")
                             .font(G.dynamicMono(.caption))
                             .foregroundColor(G.text2)
                             .tracking(5)
