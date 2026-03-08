@@ -175,11 +175,13 @@ struct BubbleView: View {
     let bubble: ChatBubble
     let lang: AppLanguage
     let showProfileImage: Bool
+    let isEncounter: Bool
     
-    init(bubble: ChatBubble, lang: AppLanguage, showProfileImage: Bool = false) {
+    init(bubble: ChatBubble, lang: AppLanguage, showProfileImage: Bool = false, isEncounter: Bool = false) {
         self.bubble = bubble
         self.lang = lang
         self.showProfileImage = showProfileImage
+        self.isEncounter = isEncounter
     }
     
     var body: some View {
@@ -198,7 +200,6 @@ struct BubbleView: View {
     private var npcBox: some View {
         HStack(alignment: .bottom, spacing: 8) {
             
-            // Profile image OR Invisible placeholder for alignment
             if showProfileImage {
                 Image("andreas_profile")
                     .resizable()
@@ -209,8 +210,8 @@ struct BubbleView: View {
                         Circle().stroke(G.npcBorder, lineWidth: 1.5)
                     )
                     .padding(.bottom, 2)
+                    .accessibilityHidden(true)
             } else {
-                // INSTAGRAM ALIGNMENT: Empty space so bubbles align nicely
                 Color.clear
                     .frame(width: 36, height: 36)
                     .padding(.bottom, 2)
@@ -234,6 +235,8 @@ struct BubbleView: View {
             
             Spacer(minLength: 30)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(isEncounter ? "andreas said: \(bubble.text)" : "andreas messaged this in chat mode: \(bubble.text)")
     }
     
     // ── Player: warm peach box, right ──
@@ -257,6 +260,8 @@ struct BubbleView: View {
                         .stroke(G.playerBorder, lineWidth: 0.5)
                 )
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(isEncounter ? "you said: \(bubble.text)" : "you sent in chat mode: \(bubble.text)")
     }
     
     // ── Narrative description: amber warm box ──
@@ -327,6 +332,8 @@ struct BubbleView: View {
                 )
             Spacer(minLength: 30)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Ending: \(bubble.text)")
     }
 }
 
@@ -539,5 +546,9 @@ struct ChoiceBtn: View {
         .onLongPressGesture(minimumDuration: .infinity, pressing: { p in
             withAnimation(.easeOut(duration: 0.1)) { lit = p }
         }, perform: {})
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel(text)
+        .accessibilityHint("Double tap to select this choice.")
     }
 }

@@ -42,7 +42,7 @@ struct EncounterView: View {
                             )
                             let isTypingLast = viewModel.isAndreasTyping && (index == viewModel.bubbles.count - 1)
 
-                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup && !isTypingLast)
+                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup && !isTypingLast, isEncounter: true)
                                 .id(b.id)
                                 .transition(.asymmetric(
                                     insertion: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity),
