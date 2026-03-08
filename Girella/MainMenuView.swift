@@ -36,6 +36,7 @@ struct MainMenuView: View {
                         Text("AWARE")
                             .font(.system(.largeTitle, design: .monospaced, weight: .ultraLight))
                             .tracking(20)
+                            .padding(.leading, 20) // Offset tracking to truly center
                             .foregroundColor(G.warm)
                             .shadow(color: G.warm.opacity(glow), radius: 28)
                             .shadow(color: G.warm.opacity(glow * 0.3), radius: 50)
@@ -44,6 +45,7 @@ struct MainMenuView: View {
                             .font(G.dynamicMono(.caption))
                             .foregroundColor(G.text2)
                             .tracking(5)
+                            .padding(.leading, 5) // Offset tracking to truly center
                     }
                     .opacity(titleIn ? 1 : 0)
                     .offset(y: titleIn ? 0 : 10)
