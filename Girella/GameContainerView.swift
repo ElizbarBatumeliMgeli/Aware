@@ -54,6 +54,7 @@ struct GameContainerView: View {
             }
             .animation(G.appear, value: coordinator.phase)
             .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             .onChange(of: coordinator.phase) { oldPhase, newPhase in
                 // Save when phase changes
                 Task { @MainActor in
