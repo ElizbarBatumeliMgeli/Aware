@@ -114,12 +114,11 @@ final class EncounterVM {
                 
                 withAnimation(G.appear) { isPlayerTyping = true }
                 try? await Task.sleep(nanoseconds: typingDelay)
-                withAnimation(G.appear) { isPlayerTyping = false }
-                
+
                 withAnimation(G.appear) {
+                    isPlayerTyping = false
                     bubbles.append(ChatBubble(kind: .player, text: choice.text))
-                }
-                
+                }                
                 try? await Task.sleep(nanoseconds: 300_000_000)
                 advance()
             }
@@ -133,12 +132,11 @@ final class EncounterVM {
             
             withAnimation(G.appear) { isPlayerTyping = true }
             try? await Task.sleep(nanoseconds: typingDelay)
-            withAnimation(G.appear) { isPlayerTyping = false }
-            
+
             withAnimation(G.appear) {
+                isPlayerTyping = false
                 bubbles.append(ChatBubble(kind: .player, text: choice.text))
-            }
-            
+            }            
             try? await Task.sleep(nanoseconds: 500_000_000)
             
             nodeIndex += 1
@@ -146,9 +144,9 @@ final class EncounterVM {
             
             let delay = settings.pacing.encounterNs(baseMs: option.reactionDelayMs)
             if delay > 500_000_000 {
-                isThinking = true
+                withAnimation(G.appear) { isThinking = true }
                 try? await Task.sleep(nanoseconds: delay)
-                isThinking = false
+                withAnimation(G.appear) { isThinking = false }
             } else {
                 try? await Task.sleep(nanoseconds: delay)
             }
@@ -166,9 +164,9 @@ final class EncounterVM {
                     let typingDelay = settings.pacing.typingDelayNs(charCount: line.l(lang).count)
                     withAnimation(G.appear) { isAndreasTyping = true }
                     try? await Task.sleep(nanoseconds: typingDelay)
-                    withAnimation(G.appear) { isAndreasTyping = false }
-                    
+
                     withAnimation(G.appear) {
+                        isAndreasTyping = false
                         bubbles.append(ChatBubble(kind: .npc, text: line.l(lang)))
                     }
                     updateSaveState()
@@ -255,9 +253,9 @@ final class EncounterVM {
         if !isPlayer, let ms = node.reactionDelayMs {
             let delay = settings.pacing.encounterNs(baseMs: ms)
             if delay > 500_000_000 {
-                isThinking = true
+                withAnimation(G.appear) { isThinking = true }
                 try? await Task.sleep(nanoseconds: delay)
-                isThinking = false
+                withAnimation(G.appear) { isThinking = false }
             } else {
                 try? await Task.sleep(nanoseconds: delay)
             }
@@ -265,16 +263,27 @@ final class EncounterVM {
         
         if let lines = node.lines {
             let kind: BubbleKind = isPlayer ? .player : .npc
+            
+            if isPlayer {
+                try? await Task.sleep(nanoseconds: settings.pacing.responseDelayNs / 2)
+            }
+            
             for (i, line) in lines.enumerated() {
+                let typingDelay = settings.pacing.typingDelayNs(charCount: line.l(lang).count)
                 if !isPlayer {
-                    let typingDelay = settings.pacing.typingDelayNs(charCount: line.l(lang).count)
                     withAnimation(G.appear) { isAndreasTyping = true }
                     try? await Task.sleep(nanoseconds: typingDelay)
-                    withAnimation(G.appear) { isAndreasTyping = false }
-                }
-                
-                withAnimation(G.appear) {
-                    bubbles.append(ChatBubble(kind: kind, text: line.l(lang)))
+                    withAnimation(G.appear) {
+                        isAndreasTyping = false
+                        bubbles.append(ChatBubble(kind: kind, text: line.l(lang)))
+                    }
+                } else {
+                    withAnimation(G.appear) { isPlayerTyping = true }
+                    try? await Task.sleep(nanoseconds: typingDelay)
+                    withAnimation(G.appear) {
+                        isPlayerTyping = false
+                        bubbles.append(ChatBubble(kind: kind, text: line.l(lang)))
+                    }
                 }
                 updateSaveState()
                 if i < lines.count - 1 {

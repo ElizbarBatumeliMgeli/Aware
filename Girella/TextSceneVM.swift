@@ -132,12 +132,11 @@ final class TextSceneVM {
                 
                 withAnimation(G.appear) { isPlayerTyping = true }
                 try? await Task.sleep(nanoseconds: typingDelay)
-                withAnimation(G.appear) { isPlayerTyping = false }
-                
+
                 withAnimation(G.appear) {
+                    isPlayerTyping = false
                     bubbles.append(ChatBubble(kind: .player, text: choice.text))
-                }
-                
+                }                
                 try? await Task.sleep(nanoseconds: 300_000_000)
                 nodeIndex += 1
                 updateSaveState()
@@ -151,12 +150,11 @@ final class TextSceneVM {
             
             withAnimation(G.appear) { isPlayerTyping = true }
             try? await Task.sleep(nanoseconds: typingDelay)
-            withAnimation(G.appear) { isPlayerTyping = false }
-            
+
             withAnimation(G.appear) {
+                isPlayerTyping = false
                 bubbles.append(ChatBubble(kind: .player, text: choice.text))
-            }
-            
+            }            
             try? await Task.sleep(nanoseconds: 400_000_000)
             
             nodeIndex += 1
@@ -168,11 +166,10 @@ final class TextSceneVM {
                     let msgText = msg.l(settings.language)
                     let typingDelay = settings.pacing.typingDelayNs(charCount: msgText.count)
                     
-                    isTyping = true
+                    withAnimation(G.appear) { isTyping = true }
                     try? await Task.sleep(nanoseconds: typingDelay)
-                    isTyping = false
-                    
                     withAnimation(G.appear) {
+                        isTyping = false
                         bubbles.append(ChatBubble(kind: .npc, text: msgText))
                     }
                     updateSaveState()
@@ -318,11 +315,11 @@ final class TextSceneVM {
                 let msgText = msg.l(lang)
                 let typingDelay = settings.pacing.typingDelayNs(charCount: msgText.count)
                 
-                isTyping = true
+                withAnimation(G.appear) { isTyping = true }
                 try? await Task.sleep(nanoseconds: typingDelay)
-                isTyping = false
-                
+
                 withAnimation(G.appear) {
+                    isTyping = false
                     bubbles.append(ChatBubble(kind: kind, text: msgText))
                 }
                 updateSaveState()
@@ -332,15 +329,16 @@ final class TextSceneVM {
                 }
             }
         } else {
+            try? await Task.sleep(nanoseconds: settings.pacing.responseDelayNs / 2) // Small delay before player starts typing
             for (i, msg) in messages.enumerated() {
                 let msgText = msg.l(lang)
                 let typingDelay = settings.pacing.typingDelayNs(charCount: msgText.count)
                 
-                isPlayerTyping = true
+                withAnimation(G.appear) { isPlayerTyping = true }
                 try? await Task.sleep(nanoseconds: typingDelay)
-                isPlayerTyping = false
-                
+
                 withAnimation(G.appear) {
+                    isPlayerTyping = false
                     bubbles.append(ChatBubble(kind: kind, text: msgText))
                 }
                 updateSaveState()
@@ -353,9 +351,9 @@ final class TextSceneVM {
         if isPlayer, let delayMs = node.responseDelayMs {
             let scriptedDelay = settings.pacing.scriptedDelayNs(baseMs: delayMs)
             if scriptedDelay > 500_000_000 {
-                isTyping = true
+                withAnimation(G.appear) { isTyping = true }
                 try? await Task.sleep(nanoseconds: scriptedDelay)
-                isTyping = false
+                withAnimation(G.appear) { isTyping = false }
             } else {
                 try? await Task.sleep(nanoseconds: scriptedDelay)
             }

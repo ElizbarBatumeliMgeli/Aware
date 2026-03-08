@@ -330,12 +330,40 @@ struct BubbleView: View {
     }
 }
 
+// MARK: ─── Smooth Typing Dot ──────────────────────────────────────────
+
+struct SmoothTypingDot: View {
+    let color: Color
+    let size: CGFloat
+    let delay: Double
+    var maxOpacity: Double = 0.85
+    var minOpacity: Double = 0.2
+    
+    @State private var isAnimating = false
+    
+    var body: some View {
+        Circle()
+            .fill(color)
+            .frame(width: size, height: size)
+            .opacity(isAnimating ? maxOpacity : minOpacity)
+            .scaleEffect(isAnimating ? 1.1 : 0.8)
+            .onAppear {
+                isAnimating = false
+                withAnimation(
+                    .easeInOut(duration: 0.6)
+                    .repeatForever(autoreverses: true)
+                    .delay(delay)
+                ) {
+                    isAnimating = true
+                }
+            }
+    }
+}
+
 // MARK: ─── Typing Indicator (pure async, no Combine) ────────────────
 
 struct TypingDots: View {
     let label: String
-    @State private var phase = 0
-    @State private var animTask: Task<Void, Never>?
     
     var body: some View {
         HStack(spacing: 4) {
@@ -344,39 +372,18 @@ struct TypingDots: View {
                 .foregroundColor(G.dim)
             HStack(spacing: 3) {
                 ForEach(0..<3, id: \.self) { i in
-                    Circle()
-                        .fill(G.warm.opacity(dotOpacity(for: i)))
-                        .frame(width: 4, height: 4)
+                    SmoothTypingDot(color: G.warm, size: 4, delay: Double(i) * 0.2, maxOpacity: 0.75, minOpacity: 0.15)
                 }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 4)
-        .onAppear {
-            animTask = Task {
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 350_000_000)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        phase = (phase + 1) % 4 // 0, 1, 2, 3 (3 is all off)
-                    }
-                }
-            }
-        }
-        .onDisappear { animTask?.cancel() }
-    }
-    
-    private func dotOpacity(for index: Int) -> Double {
-        if phase == 3 { return 0.15 }
-        return index == phase ? 0.75 : 0.2
     }
 }
 
 // MARK: ─── Andreas Typing Indicator (Instagram-style with profile image) ───
 
 struct AndreasTypingIndicator: View {
-    @State private var phase = 0
-    @State private var animTask: Task<Void, Never>?
-    
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
             // Profile image
@@ -392,9 +399,7 @@ struct AndreasTypingIndicator: View {
             // Typing bubble with animated dots
             HStack(spacing: 4) {
                 ForEach(0..<3, id: \.self) { i in
-                    Circle()
-                        .fill(G.npcText.opacity(dotOpacity(for: i)))
-                        .frame(width: 8, height: 8)
+                    SmoothTypingDot(color: G.npcText, size: 8, delay: Double(i) * 0.2, maxOpacity: 0.85, minOpacity: 0.25)
                 }
             }
             .padding(.vertical, 12)
@@ -410,39 +415,18 @@ struct AndreasTypingIndicator: View {
             
             Spacer(minLength: 30)
         }
-        .onAppear {
-            animTask = Task {
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 400_000_000)
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        phase = (phase + 1) % 4
-                    }
-                }
-            }
-        }
-        .onDisappear { animTask?.cancel() }
-    }
-    
-    private func dotOpacity(for index: Int) -> Double {
-        if phase == 3 { return 0.25 }
-        return index == phase ? 0.85 : 0.3
     }
 }
 
 // MARK: ─── Player Typing Indicator ──────────────────────────────────
 
 struct PlayerTypingDots: View {
-    @State private var phase = 0
-    @State private var animTask: Task<Void, Never>?
-    
     var body: some View {
         HStack(spacing: 4) {
             Spacer()
             HStack(spacing: 3) {
                 ForEach(0..<3, id: \.self) { i in
-                    Circle()
-                        .fill(G.playerBorder.opacity(dotOpacity(for: i)))
-                        .frame(width: 4, height: 4)
+                    SmoothTypingDot(color: G.playerBorder, size: 4, delay: Double(i) * 0.2, maxOpacity: 0.85, minOpacity: 0.2)
                 }
             }
             Text("you are typing")
@@ -451,22 +435,6 @@ struct PlayerTypingDots: View {
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
         .padding(.trailing, 4)
-        .onAppear {
-            animTask = Task {
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 350_000_000)
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        phase = (phase + 1) % 4
-                    }
-                }
-            }
-        }
-        .onDisappear { animTask?.cancel() }
-    }
-    
-    private func dotOpacity(for index: Int) -> Double {
-        if phase == 3 { return 0.2 }
-        return index == phase ? 0.85 : 0.25
     }
 }
 
@@ -475,9 +443,6 @@ struct PlayerTypingDots: View {
 struct CenterTypingIndicator: View {
     let text: String
     let color: Color
-    
-    @State private var phase = 0
-    @State private var animTask: Task<Void, Never>?
     
     var body: some View {
         HStack(spacing: 6) {
@@ -488,29 +453,11 @@ struct CenterTypingIndicator: View {
                 .foregroundColor(G.dim.opacity(0.6))
             HStack(spacing: 3) {
                 ForEach(0..<3, id: \.self) { i in
-                    Circle()
-                        .fill(color.opacity(dotOpacity(for: i)))
-                        .frame(width: 3, height: 3)
+                    SmoothTypingDot(color: color, size: 3, delay: Double(i) * 0.2, maxOpacity: 0.75, minOpacity: 0.2)
                 }
             }
             Spacer()
         }
-        .onAppear {
-            animTask = Task {
-                while !Task.isCancelled {
-                    try? await Task.sleep(nanoseconds: 400_000_000)
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        phase = (phase + 1) % 4
-                    }
-                }
-            }
-        }
-        .onDisappear { animTask?.cancel() }
-    }
-    
-    private func dotOpacity(for index: Int) -> Double {
-        if phase == 3 { return 0.25 }
-        return index == phase ? 0.75 : 0.2
     }
 }
 

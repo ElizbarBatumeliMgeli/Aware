@@ -35,12 +35,18 @@ struct EncounterView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        ForEach(viewModel.bubbles) { b in
-                            BubbleView(bubble: b, lang: lang, showProfileImage: b.kind == .npc)
+                        ForEach(Array(viewModel.bubbles.enumerated()), id: \.element.id) { index, b in
+                            let isLastInGroup = b.kind == .npc && (
+                                index == viewModel.bubbles.count - 1 ||
+                                viewModel.bubbles[index + 1].kind != .npc
+                            )
+                            let isTypingLast = viewModel.isAndreasTyping && (index == viewModel.bubbles.count - 1)
+
+                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup && !isTypingLast)
                                 .id(b.id)
                                 .transition(.asymmetric(
                                     insertion: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity),
-                                    removal: .opacity
+                                    removal: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity)
                                 ))
                         }
                         
@@ -56,7 +62,7 @@ struct EncounterView: View {
                                 .id("andreas_typing_indicator")
                                 .transition(.asymmetric(
                                     insertion: .scale(scale: 0.92, anchor: .leading).combined(with: .opacity),
-                                    removal: .opacity
+                                    removal: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity)
                                 ))
                         }
                         
@@ -74,7 +80,7 @@ struct EncounterView: View {
                         if viewModel.isPlayerTyping {
                             CenterTypingIndicator(text: "you are typing", color: G.playerBorder)
                                 .padding(.vertical, 24)
-                                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                                .transition(.opacity)
                         } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
                             ForEach(viewModel.choices) { c in
                                 ChoiceBtn(text: c.text, lang: lang) { viewModel.selectChoice(c) }
@@ -96,9 +102,9 @@ struct EncounterView: View {
                     .padding(.top, 10)
                     .padding(.bottom, 14)
                     .background(G.surface) // This will automatically fill the gap behind the home indicator!
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isThinking)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isAndreasTyping)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isPlayerTyping)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isThinking)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isAndreasTyping)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isPlayerTyping)
                     .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.choicesVisible)
                 }
                 .onChange(of: viewModel.bubbles.count) { scrollToAnchor(proxy) }

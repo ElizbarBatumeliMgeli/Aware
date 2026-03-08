@@ -41,12 +41,12 @@ struct TextSceneView: View {
                                 index == viewModel.bubbles.count - 1 ||
                                 viewModel.bubbles[index + 1].kind != .npc
                             )
-                            
-                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup)
-                                .id(b.id)
-                                .transition(.asymmetric(
+                            let isTypingLast = viewModel.isTyping && (index == viewModel.bubbles.count - 1)
+
+                            BubbleView(bubble: b, lang: lang, showProfileImage: isLastInGroup && !isTypingLast)
+                                .id(b.id)                                .transition(.asymmetric(
                                     insertion: .scale(scale: 0.92, anchor: .leading).combined(with: .opacity),
-                                    removal: .opacity
+                                    removal: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity)
                                 ))
                         }
                         
@@ -55,7 +55,7 @@ struct TextSceneView: View {
                                 .id("andreas_typing_indicator")
                                 .transition(.asymmetric(
                                     insertion: .scale(scale: 0.92, anchor: .leading).combined(with: .opacity),
-                                    removal: .opacity
+                                    removal: .scale(scale: 0.95, anchor: .leading).combined(with: .opacity)
                                 ))
                         }
                         
@@ -81,12 +81,12 @@ struct TextSceneView: View {
                                 .font(G.dynamicMono(.caption2, .medium))
                                 .foregroundColor(G.dim)
                                 .padding(.vertical, 24)
-                                .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                                .transition(.opacity)
                                 
                             } else if viewModel.isPlayerTyping {
                                 CenterTypingIndicator(text: "you are typing", color: G.playerBorder)
                                     .padding(.vertical, 24)
-                                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                                    .transition(.opacity)
                                 
                             } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
                                 ForEach(viewModel.choices) { c in
@@ -142,9 +142,9 @@ struct TextSceneView: View {
                         }
                     }
                     .background(G.surface)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isWaiting)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isTyping)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.isPlayerTyping)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isWaiting)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isTyping)
+                    .animation(.easeOut(duration: 0.3), value: viewModel.isPlayerTyping)
                     .animation(.spring(response: 0.35, dampingFraction: 0.8), value: viewModel.choicesVisible)
                     .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.showTransitionButton)
                 }

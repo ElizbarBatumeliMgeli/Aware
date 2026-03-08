@@ -59,17 +59,17 @@ enum G {
     
     // Legacy fixed-size font (use sparingly, only for non-content UI)
     static func mono(_ size: CGFloat, _ w: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: w, design: .monospaced)
+        .system(size: size, weight: w)
     }
     
     // Dynamic Type-aware fonts (preferred for all user-facing text)
     static func dynamicMono(_ style: Font.TextStyle, _ w: Font.Weight = .regular) -> Font {
-        .system(style, design: .monospaced, weight: w)
+        .system(style, weight: w)
     }
     
     // Relative sizing with Dynamic Type support
     static func scaledMono(_ baseSize: CGFloat, relativeTo style: Font.TextStyle = .body, _ w: Font.Weight = .regular) -> Font {
-        .system(size: baseSize, weight: w, design: .monospaced).relativeToStyle(style)
+        .system(size: baseSize, weight: w).relativeToStyle(style)
     }
     
     // MARK: - Animations
@@ -83,7 +83,7 @@ enum G {
 private extension Font {
     func relativeToStyle(_ style: Font.TextStyle) -> Font {
         // This creates a font that scales with the given text style
-        return Font.system(style, design: .monospaced)
+        return Font.system(style)
     }
 }
 
