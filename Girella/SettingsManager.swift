@@ -37,11 +37,11 @@ enum Pacing: String, CaseIterable, Identifiable, Codable {
     
     var id: String { rawValue }
     
-    var label: String {
+    var label: [String] {
         switch self {
-        case .fast:   return "Fast"
-        case .medium: return "Medium"
-        case .native: return "Native"
+        case .fast:   return ["Fast","instant messages"]
+        case .medium: return ["Medium","5-15min delay between messages"]
+        case .native: return ["Native","30-60min delay between messages"]
         }
     }
     

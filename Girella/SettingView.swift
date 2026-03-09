@@ -5,21 +5,21 @@
 //  Created by Elizbar Kheladze on 22/02/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct SettingsView: View {
     @Environment(SettingsManager.self) var settings: SettingsManager
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query private var gameSaves: [GameSave]
-    
+
     @State private var showResetConfirm = false
-    
+
     var body: some View {
         ZStack {
             G.bg.ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
                 // Header
                 HStack {
@@ -44,12 +44,11 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
                 .padding(.top, 28)
                 .padding(.bottom, 24)
-                
+
                 Rectangle().fill(G.warm.opacity(0.12)).frame(height: 1).padding(.horizontal, 24)
-                
+
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
-                        
                         SettingsGroup(title: "LANGUAGE") {
                             ForEach(AppLanguage.allCases) { lang in
                                 RadioRow(label: lang.label, on: settings.language == lang) {
@@ -57,15 +56,15 @@ struct SettingsView: View {
                                 }
                             }
                         }
-                        
+
                         SettingsGroup(title: "MESSAGE PACING") {
                             ForEach(Pacing.allCases) { p in
-                                RadioRow(label: p.label, on: settings.pacing == p) {
+                                RadioRow(label: p.label[0], description: p.label[1], on: settings.pacing == p) {
                                     withAnimation(.easeOut(duration: 0.15)) { settings.pacing = p }
                                 }
                             }
                         }
-                        
+
                         // Reset Game Section
                         if !gameSaves.isEmpty {
                             SettingsGroup(title: "GAME DATA") {
@@ -94,7 +93,7 @@ struct SettingsView: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        
+
                         VStack(alignment: .leading, spacing: 8) {
                             Text("ABOUT")
                                 .font(G.dynamicMono(.caption2, .semibold))
@@ -118,7 +117,7 @@ struct SettingsView: View {
         }
         .presentationBackground(G.bg)
         .alert("Reset Game Progress?", isPresented: $showResetConfirm) {
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
             Button("Reset", role: .destructive) {
                 resetGameProgress()
             }
@@ -126,7 +125,7 @@ struct SettingsView: View {
             Text("This will delete your saved game and start fresh. This action cannot be undone.")
         }
     }
-    
+
     private func resetGameProgress() {
         for save in gameSaves {
             modelContext.delete(save)
@@ -144,7 +143,7 @@ struct SettingsView: View {
 private struct SettingsGroup<Content: View>: View {
     let title: String
     @ViewBuilder let content: () -> Content
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
@@ -160,9 +159,10 @@ private struct SettingsGroup<Content: View>: View {
 
 private struct RadioRow: View {
     let label: String
+    var description: String = ""
     let on: Bool
     let tap: () -> Void
-    
+
     var body: some View {
         Button(action: tap) {
             HStack(spacing: 12) {
@@ -180,6 +180,9 @@ private struct RadioRow: View {
                     .font(G.dynamicMono(.subheadline))
                     .foregroundColor(on ? G.text1 : G.text2)
                 Spacer()
+                Text(description)
+                    .font(G.dynamicMono(.footnote))
+                    .foregroundColor(on ? G.dim : G.dimSubtle)
             }
             .padding(.vertical, 9)
             .padding(.horizontal, 12)

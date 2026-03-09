@@ -139,6 +139,14 @@ final class EncounterVM {
             }            
             try? await Task.sleep(nanoseconds: 500_000_000)
             
+            if node.id == "choice_15" {
+                withAnimation(G.appear) {
+                    bubbles.append(ChatBubble(kind: .image, text: "scene_3"))
+                }
+                updateSaveState()
+                try? await Task.sleep(nanoseconds: 500_000_000)
+            }
+            
             nodeIndex += 1
             updateSaveState()
             
