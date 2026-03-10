@@ -10,6 +10,7 @@ import SwiftUI
 struct TopBar: View {
     let title: String
     let accent: Color
+    let totalScore: Int
     let onExit: () -> Void
     
     @State private var glow: Double = 0.3
@@ -43,7 +44,7 @@ struct TopBar: View {
                     )
             }
             .sheet(isPresented: $showProfileSheet) {
-                AndreasProfileView()
+                AndreasProfileView(totalScore: totalScore)
             }
         }
         // Use overlay to keep title perfectly mathematically centered regardless of button widths
@@ -69,6 +70,7 @@ struct TopBar: View {
 
 struct AndreasProfileView: View {
     @Environment(\.dismiss) private var dismiss
+    let totalScore: Int
     
     var body: some View {
         ZStack {
@@ -101,7 +103,7 @@ struct AndreasProfileView: View {
                 VStack(spacing: 32) {
                     StatRow(
                         title: "TRUST",
-                        level: 1,
+                        level: 1.0,
                         maxLevel: 10,
                         activeColor: .yellow,
                         symbol: "shield.fill"
@@ -109,7 +111,7 @@ struct AndreasProfileView: View {
                     
                     StatRow(
                         title: "FRIENDSHIP",
-                        level: 5,
+                        level: min(5.0 + Double(totalScore) * 0.5, 10.0),
                         maxLevel: 10,
                         activeColor: .pink,
                         symbol: "heart.fill"
@@ -128,7 +130,7 @@ struct AndreasProfileView: View {
 
 struct StatRow: View {
     let title: String
-    let level: Int
+    let level: Double
     let maxLevel: Int
     let activeColor: Color
     let symbol: String
@@ -141,24 +143,35 @@ struct StatRow: View {
                     .tracking(3)
                     .foregroundColor(G.text2)
                 Spacer()
-                Text("\(level)/\(maxLevel)")
+                Text("\(String(format: "%g", level))/\(maxLevel)")
                     .font(G.dynamicMono(.caption2, .medium))
                     .foregroundColor(G.dim)
             }
             
             HStack(spacing: 6) {
                 ForEach(0..<maxLevel, id: \.self) { i in
+                    let fill = level - Double(i)
                     ZStack {
                         // Outer Circle
                         Circle()
-                            .stroke(i < level ? activeColor.opacity(0.8) : G.dim.opacity(0.25), lineWidth: 1.5)
+                            .stroke(fill > 0 ? activeColor.opacity(0.8) : G.dim.opacity(0.25), lineWidth: 1.5)
                             .frame(width: 22, height: 22)
                         
                         // Inner Symbol
-                        if i < level {
+                        if fill >= 1 {
                             Image(systemName: symbol)
                                 .font(.system(size: 10))
                                 .foregroundColor(activeColor)
+                        } else if fill > 0 {
+                            Image(systemName: symbol)
+                                .font(.system(size: 10))
+                                .foregroundColor(activeColor)
+                                .mask(
+                                    GeometryReader { geo in
+                                        Rectangle()
+                                            .frame(width: geo.size.width * CGFloat(fill), height: geo.size.height)
+                                    }
+                                )
                         }
                     }
                 }
@@ -504,7 +517,7 @@ struct ChoicePanel: View {
             Rectangle().fill(G.warm.opacity(0.1)).frame(height: 1)
             
             ForEach(choices) { c in
-                ChoiceBtn(text: c.text, lang: lang) { onSelect(c) }
+                ChoiceBtn(text: c.text, lang: lang) { _ in onSelect(c) }
             }
         }
         .padding(.horizontal, 18)
@@ -519,12 +532,13 @@ struct ChoicePanel: View {
 struct ChoiceBtn: View {
     let text: String
     let lang: AppLanguage
-    let action: () -> Void
+    let action: (CGPoint) -> Void
     
     @State private var lit = false
+    @State private var centerPoint: CGPoint = .zero
     
     var body: some View {
-        Button(action: action) {
+        Button(action: { action(centerPoint) }) {
             Text(text)
                 .font(G.dynamicMono(.subheadline))
                 .foregroundColor(lit ? G.warm : G.text1)
@@ -540,6 +554,15 @@ struct ChoiceBtn: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(lit ? G.warm.opacity(0.5) : G.dim.opacity(0.2), lineWidth: 1)
+                )
+                .background(
+                    GeometryReader { geo in
+                        Color.clear
+                            .onAppear { centerPoint = CGPoint(x: geo.frame(in: .named("GameSpace")).midX, y: geo.frame(in: .named("GameSpace")).midY) }
+                            .onChange(of: geo.frame(in: .named("GameSpace"))) { newFrame in
+                                centerPoint = CGPoint(x: newFrame.midX, y: newFrame.midY)
+                            }
+                    }
                 )
         }
         .buttonStyle(WarmBtnStyle())

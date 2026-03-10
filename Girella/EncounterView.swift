@@ -28,7 +28,7 @@ struct EncounterView: View {
         let lang = coordinator.settings.language
         
         VStack(spacing: 0) {
-            TopBar(title: "ENCOUNTER", accent: G.warm, onExit: onExit)
+            TopBar(title: "ENCOUNTER", accent: G.warm, totalScore: coordinator.totalScore, onExit: onExit)
             Rectangle().fill(G.warm.opacity(0.12)).frame(height: 1)
             
             // ─── Narrative feed ───
@@ -83,7 +83,12 @@ struct EncounterView: View {
                                 .transition(.opacity)
                         } else if viewModel.choicesVisible && !viewModel.choices.isEmpty {
                             ForEach(viewModel.choices) { c in
-                                ChoiceBtn(text: c.text, lang: lang) { viewModel.selectChoice(c) }
+                                ChoiceBtn(text: c.text, lang: lang) { center in
+                                    if c.points > 0 {
+                                        coordinator.spawnHeart(at: center)
+                                    }
+                                    viewModel.selectChoice(c)
+                                }
                             }
                             .transition(.asymmetric(
                                 insertion: .scale(scale: 0.95, anchor: .bottom).combined(with: .opacity),

@@ -51,7 +51,28 @@ struct GameContainerView: View {
                     EpilogueView(coordinator: coordinator, onExit: { handleExit() })
                         .transition(.opacity)
                 }
+                
+                // Heart Animations Overlay
+                GeometryReader { geo in
+                    ZStack {
+                        ForEach(coordinator.heartAnimations) { anim in
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: anim.phase == 0 ? 10 : (anim.phase == 1 ? 40 : 20)))
+                                .foregroundColor(.pink)
+                                .shadow(color: .pink.opacity(0.5), radius: 8)
+                                .opacity(anim.phase == 2 ? 0 : 1)
+                                .position(
+                                    anim.phase == 2
+                                        ? CGPoint(x: geo.size.width - 40, y: geo.safeAreaInsets.top + 30) // top right profile pic
+                                        : anim.startPoint
+                                )
+                                .id(anim.id)
+                        }
+                    }
+                }
+                .allowsHitTesting(false)
             }
+            .coordinateSpace(name: "GameSpace")
             .animation(G.appear, value: coordinator.phase)
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
@@ -241,7 +262,7 @@ struct EpilogueView: View {
         let bubbleKind: BubbleKind = tier == "good" ? .endingGood : tier == "neutral" ? .endingNeutral : .endingBad
         
         VStack(spacing: 0) {
-            TopBar(title: "ANDREAS", accent: accent, onExit: onExit)
+            TopBar(title: "ANDREAS", accent: accent, totalScore: coordinator.totalScore, onExit: onExit)
             Rectangle().fill(accent.opacity(0.12)).frame(height: 1)
             
             ScrollViewReader { proxy in

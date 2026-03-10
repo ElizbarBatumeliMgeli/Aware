@@ -14,12 +14,20 @@ enum GamePhase: Equatable {
     case epilogue
 }
 
+struct HeartAnim: Identifiable {
+    let id = UUID()
+    let startPoint: CGPoint
+    var phase: Int = 0 // 0: initial, 1: pop, 2: travel and disappear
+}
+
 @Observable
 @MainActor
 final class GameCoordinator {
     let id = UUID() // Add ID for debugging
     var phase: GamePhase = .textScene
     var totalScore: Int = 0
+    
+    var heartAnimations: [HeartAnim] = []
     
     let settings: SettingsManager
     let textScene: TextScene
@@ -71,6 +79,40 @@ final class GameCoordinator {
             }
             
             print("✅ Loaded game: phase=\(save.phase), score=\(save.totalScore), textNodes=\(save.textSceneNodeIndex), encounterNodes=\(save.encounterNodeIndex)")
+        }
+    }
+    
+    func spawnHeart(at point: CGPoint) {
+        let anim = HeartAnim(startPoint: point)
+        heartAnimations.append(anim)
+        let animId = anim.id
+        
+        Task {
+            // Phase 1: pop up
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            await MainActor.run {
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                    if let idx = self.heartAnimations.firstIndex(where: { $0.id == animId }) {
+                        self.heartAnimations[idx].phase = 1
+                    }
+                }
+            }
+            
+            // Phase 2: fly to top right and fade out
+            try? await Task.sleep(nanoseconds: 600_000_000)
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.7)) {
+                    if let idx = self.heartAnimations.firstIndex(where: { $0.id == animId }) {
+                        self.heartAnimations[idx].phase = 2
+                    }
+                }
+            }
+            
+            // Cleanup
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            await MainActor.run {
+                self.heartAnimations.removeAll(where: { $0.id == animId })
+            }
         }
     }
     
