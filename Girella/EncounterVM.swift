@@ -305,7 +305,7 @@ final class EncounterVM {
     private func showChoices(_ node: EncounterNode) {
         guard let opts = node.options else { return }
         let lang = settings.language
-        choices = opts.map { ActiveChoice(text: $0.text.l(lang), points: $0.points, tag: $0.optionId) }
+        choices = opts.map { ActiveChoice(text: $0.text.l(lang), points: $0.points, tag: $0.optionId) }.shuffled()
         withAnimation(G.soft) { choicesVisible = true }
     }
     

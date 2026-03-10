@@ -365,8 +365,7 @@ final class TextSceneVM {
         let lang = settings.language
         
         try? await Task.sleep(nanoseconds: 100_000_000)
-        
-        choices = opts.map { ActiveChoice(text: $0.text.l(lang), points: $0.points, tag: $0.optionId) }
+
+        choices = opts.map { ActiveChoice(text: $0.text.l(lang), points: $0.points, tag: $0.optionId) }.shuffled()
         withAnimation(G.soft) { choicesVisible = true }
-    }
-}
+        }}
