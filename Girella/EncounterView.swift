@@ -38,7 +38,7 @@ struct EncounterView: View {
                         ForEach(Array(viewModel.bubbles.enumerated()), id: \.element.id) { index, b in
                             let isLastInGroup = b.kind == .npc && (
                                 index == viewModel.bubbles.count - 1 ||
-                                viewModel.bubbles[index + 1].kind != .npc
+                                    viewModel.bubbles[index + 1].kind != .npc
                             )
                             let isTypingLast = viewModel.isAndreasTyping && (index == viewModel.bubbles.count - 1)
 
@@ -95,7 +95,7 @@ struct EncounterView: View {
                                 removal: .opacity
                             ))
                         } else {
-                            Text("GIRELLA")
+                            Text("AWARE")
                                 .font(G.dynamicMono(.caption2, .medium))
                                 .tracking(4)
                                 .foregroundColor(G.dim.opacity(0.4))
